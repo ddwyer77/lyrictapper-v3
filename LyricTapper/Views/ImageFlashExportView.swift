@@ -6,6 +6,7 @@ struct ImageFlashExportView: View {
     @ObservedObject var app: AppState
     @State private var previewPlayer: AVPlayer? = nil
     @State private var status: String = ""
+    @State private var enableLyrics: Bool = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -16,6 +17,7 @@ struct ImageFlashExportView: View {
                 Button("Export Video") { exportFinal() }
                 Button("Reshuffle Images") { reshuffle() }
                 Spacer()
+                Toggle("Add Lyric Overlay", isOn: $enableLyrics)
                 Text(status).foregroundColor(.secondary)
             }
             Divider()
@@ -43,7 +45,10 @@ struct ImageFlashExportView: View {
             }
         }
         .padding()
-        .onAppear { forceSettings() }
+        .onAppear {
+            forceSettings()
+            enableLyrics = false
+        }
     }
 
     private func forceSettings() {
@@ -55,7 +60,8 @@ struct ImageFlashExportView: View {
     private func renderPreview() {
         guard let audioURL = resolveAudioURL() else { status = "Select accessible audio first"; return }
         forceSettings()
-        ExportService.renderImageFlashPreview(audioURL: audioURL, intervals: app.project.imageIntervals, destinationSize: CGSize(width: 1080, height: 1920)) { result in
+        let lt = enableLyrics ? app.projectV2.tracks.lyric.takes.first(where: { $0.id == app.projectV2.tracks.lyric.currentTakeId }) : nil
+        ExportService.renderImageFlashPreview(audioURL: audioURL, intervals: app.project.imageIntervals, destinationSize: CGSize(width: 1080, height: 1920), lyricTake: lt) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let url):
@@ -76,7 +82,8 @@ struct ImageFlashExportView: View {
         panel.begin { response in
             guard response == .OK, let url = panel.url else { return }
             forceSettings()
-            ExportService.exportImageFlash(audioURL: audioURL, intervals: app.project.imageIntervals, destinationURL: url) { result in
+            let lt = enableLyrics ? app.projectV2.tracks.lyric.takes.first(where: { $0.id == app.projectV2.tracks.lyric.currentTakeId }) : nil
+            ExportService.exportImageFlash(audioURL: audioURL, intervals: app.project.imageIntervals, destinationURL: url, lyricTake: lt) { result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success:

@@ -363,13 +363,14 @@ extension ExportService {
         audioURL: URL,
         intervals: [ImageInterval],
         destinationSize: CGSize,
+        lyricTake: TrackLyricTake? = nil,
         completion: @escaping (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let tempDir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
                 let videoOnlyURL = tempDir.appendingPathComponent("image_flash_preview_\(UUID().uuidString).mp4")
-                try renderImageFlashVideoOnly(to: videoOnlyURL, audioURL: audioURL, intervals: intervals, width: Int(destinationSize.width), height: Int(destinationSize.height), fps: 30)
+                try renderImageFlashVideoOnly(to: videoOnlyURL, audioURL: audioURL, intervals: intervals, width: Int(destinationSize.width), height: Int(destinationSize.height), fps: 30, lyricTake: lyricTake)
                 // Mux audio so preview includes sound
                 let withAudioURL = tempDir.appendingPathComponent("image_flash_preview_with_audio_\(UUID().uuidString).mp4")
                 try muxAudioVideo(audioURL: audioURL, videoURL: videoOnlyURL, destinationURL: withAudioURL)
@@ -382,6 +383,7 @@ extension ExportService {
         audioURL: URL,
         intervals: [ImageInterval],
         destinationURL: URL,
+        lyricTake: TrackLyricTake? = nil,
         completion: @escaping (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global(qos: .userInitiated).async {
@@ -389,7 +391,7 @@ extension ExportService {
                 if FileManager.default.fileExists(atPath: destinationURL.path) { try? FileManager.default.removeItem(at: destinationURL) }
                 let tempDir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
                 let videoOnlyURL = tempDir.appendingPathComponent("image_flash_video_\(UUID().uuidString).mp4")
-                try renderImageFlashVideoOnly(to: videoOnlyURL, audioURL: audioURL, intervals: intervals, width: 1080, height: 1920, fps: 30)
+                try renderImageFlashVideoOnly(to: videoOnlyURL, audioURL: audioURL, intervals: intervals, width: 1080, height: 1920, fps: 30, lyricTake: lyricTake)
                 try muxAudioVideo(audioURL: audioURL, videoURL: videoOnlyURL, destinationURL: destinationURL)
                 completion(.success(destinationURL))
             } catch { completion(.failure(error)) }
@@ -397,7 +399,7 @@ extension ExportService {
     }
 }
 
-private func renderImageFlashVideoOnly(to outputURL: URL, audioURL: URL, intervals: [ImageInterval], width: Int, height: Int, fps: Int) throws {
+private func renderImageFlashVideoOnly(to outputURL: URL, audioURL: URL, intervals: [ImageInterval], width: Int, height: Int, fps: Int, lyricTake: TrackLyricTake? = nil) throws {
     let duration = try audioDuration(audioURL)
     let writer = try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
     let videoSettings: [String: Any] = [
@@ -442,6 +444,14 @@ private func renderImageFlashVideoOnly(to outputURL: URL, audioURL: URL, interva
     defer { startedScopedURLs.forEach { $0.stopAccessingSecurityScopedResource() } }
     let decodeCache = ImageDecodeCache(targetWidth: width)
 
+    // Prepare optional lyric overlay
+    let ctFont: CTFont? = {
+        guard let take = lyricTake else { return nil }
+        let relSize: CGFloat = CGFloat(take.fontSize)
+        let fontSize = max(12.0, relSize * CGFloat(min(width, height)))
+        let family = take.fontFamily ?? "Helvetica Neue"
+        return CTFontCreateWithName(family as CFString, fontSize, nil)
+    }()
     while frameIndex < totalFrames {
         autoreleasepool {
             while !videoInput.isReadyForMoreMediaData { Thread.sleep(forTimeInterval: 0.002) }
@@ -471,6 +481,26 @@ private func renderImageFlashVideoOnly(to outputURL: URL, audioURL: URL, interva
                         ctx?.draw(cg, in: CGRect(x: 0, y: y, width: width, height: destH))
                     } else {
                         Logger.logAsync(.warn, "Missing or unreadable image during export", context: "interval t=\(t)")
+                    }
+                }
+                if let f = ctFont, let take = lyricTake {
+                    let w = take.timings.last(where: { $0.start <= t && t < $0.end })
+                    if let word = w?.word, !word.isEmpty {
+                        let white = CGColor(gray: 1.0, alpha: 1.0)
+                        let black = CGColor(gray: 0.0, alpha: 1.0)
+                        let attrs: [NSAttributedString.Key: Any] = [
+                            NSAttributedString.Key(kCTFontAttributeName as String): f,
+                            NSAttributedString.Key(kCTForegroundColorAttributeName as String): white,
+                            NSAttributedString.Key(kCTStrokeColorAttributeName as String): black,
+                            NSAttributedString.Key(kCTStrokeWidthAttributeName as String): -2.0
+                        ]
+                        let attr = NSAttributedString(string: word, attributes: attrs)
+                        let line = CTLineCreateWithAttributedString(attr as CFAttributedString)
+                        let bounds = CTLineGetImageBounds(line, ctx!)
+                        let x = (CGFloat(width) - bounds.width) / 2.0 - bounds.origin.x
+                        let y = (CGFloat(height) - bounds.height) / 2.0 - bounds.origin.y
+                        ctx?.textPosition = CGPoint(x: x, y: y)
+                        CTLineDraw(line, ctx!)
                     }
                 }
             }
