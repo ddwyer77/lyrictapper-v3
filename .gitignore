@@ -1,21 +1,57 @@
-# Xcode
-DerivedData/
-build/
-*.xcuserstate
-*.xccheckout
-*.xcscmblueprint
-xcuserdata/
-
-# Swift Package Manager
-.packages/
-.swiftpm/
-
 # macOS
 .DS_Store
+.AppleDouble
+.LSOverride
 
-# Logs
+# Xcode user data
+**/xcuserdata/
+**/*.xccheckout
+**/*.xcscmblueprint
+**/*.xcuserstate
+**/*.moved-aside
+
+# Xcode build products
+**/build/
+**/Build/
+
+# Swift Package Manager
+/.build/
+/Packages/
+**/.swiftpm/
+
+# CocoaPods
+/Pods/
+
+# Carthage
+/Carthage/
+
+# Fastlane
+/fastlane/report.xml
+/fastlane/Preview.html
+/fastlane/screenshots/
+/fastlane/test_output/
+
+# Archives and exports
+*.xcarchive
+*.ipa
+*.dSYM
+*.dSYM.zip
+*.pkg
+
+# Certificates/keys (store securely elsewhere)
+*.p12
+*.cer
+*.mobileprovision
+*.provisionprofile
+
+# Logs and misc
 *.log
+*.orig
+*.rej
 
-# Editor
-.vscode/
-.idea/
+# IDE configs
+**/.idea/
+**/.vscode/
+
+# App Store Connect API keys and local ASC artifacts
+/build/asc/

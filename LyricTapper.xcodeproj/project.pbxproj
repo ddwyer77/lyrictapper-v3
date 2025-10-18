@@ -34,41 +34,40 @@
 		AA0001190000000000000001 /* LyricTapper/Views/SystemFontPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00001B0000000000000001 /* LyricTapper/Views/SystemFontPickerView.swift */; };
 		AA00011A0000000000000001 /* LyricTapper/Views/PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00001C0000000000000001 /* LyricTapper/Views/PlayerView.swift */; };
 		AA00011B0000000000000001 /* LyricTapper/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA00001D0000000000000001 /* LyricTapper/Assets.xcassets */; };
-		AA00011C0000000000000001 /* Lyric Tapper/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA00001E0000000000000001 /* Lyric Tapper/Assets.xcassets */; };
-ABF2F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift */; };
-ABF2F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift */; };
-ABF2F0030000000000000001 /* LyricTapper/Views/HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0030000000000000001 /* LyricTapper/Views/HomeView.swift */; };
-ABF2F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift */; };
-ABF2F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift */; };
-ABF2F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift */; };
-ABF2F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift */; };
-AA00F1010000000000000001 /* LyricTapper/Models/ProjectV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0010000000000000001 /* LyricTapper/Models/ProjectV2.swift */; };
-AA00F1020000000000000001 /* LyricTapper/Services/ProjectManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0020000000000000001 /* LyricTapper/Services/ProjectManager.swift */; };
-AA00F1050000000000000001 /* LyricTapper/Views/DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00011D0000000000000001 /* LyricTapper/Views/DashboardView.swift */; };
-AA00F1060000000000000001 /* LyricTapper/Views/MergeExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0090000000000000001 /* LyricTapper/Views/MergeExportView.swift */; };
-AA00F1040000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0030000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift */; };
-AA00F10A0000000000000001 /* LyricTapper/Views/LyricTakesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00A0000000000000001 /* LyricTapper/Views/LyricTakesView.swift */; };
-AA00F10B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift */; };
-AA00F1070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift */; };
-AA00F1080000000000000001 /* LyricTapper/Services/CompositorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0080000000000000001 /* LyricTapper/Services/CompositorService.swift */; };
-AA00F10C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift */; };
-AA00F10D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */; };
+		AA00F1010000000000000001 /* LyricTapper/Models/ProjectV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0010000000000000001 /* LyricTapper/Models/ProjectV2.swift */; };
+		AA00F1020000000000000001 /* LyricTapper/Services/ProjectManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0020000000000000001 /* LyricTapper/Services/ProjectManager.swift */; };
+		AA00F1040000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0030000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift */; };
+		AA00F1050000000000000001 /* LyricTapper/Views/DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00011D0000000000000001 /* LyricTapper/Views/DashboardView.swift */; };
+		AA00F1060000000000000001 /* LyricTapper/Views/MergeExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0090000000000000001 /* LyricTapper/Views/MergeExportView.swift */; };
+		AA00F1070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift */; };
+		AA00F1080000000000000001 /* LyricTapper/Services/CompositorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0080000000000000001 /* LyricTapper/Services/CompositorService.swift */; };
+		AA00F10A0000000000000001 /* LyricTapper/Views/LyricTakesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00A0000000000000001 /* LyricTapper/Views/LyricTakesView.swift */; };
+		AA00F10B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift */; };
+		AA00F10C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift */; };
+		AA00F10D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */; };
+		ABF2F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift */; };
+		ABF2F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift */; };
+		ABF2F0030000000000000001 /* LyricTapper/Views/HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0030000000000000001 /* LyricTapper/Views/HomeView.swift */; };
+		ABF2F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift */; };
+		ABF2F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift */; };
+		ABF2F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift */; };
+		ABF2F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-        C99F868D2E9AF40D00627C27 /* PBXContainerItemProxy */ = {
+		C99F868D2E9AF40D00627C27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AA0009010000000000000001 /* Project object */;
 			proxyType = 1;
-            remoteGlobalIDString = AA0005010000000000000001;
-            remoteInfo = LyricTapper;
+			remoteGlobalIDString = AA0005010000000000000001;
+			remoteInfo = LyricTapper;
 		};
 		C99F86972E9AF40D00627C27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AA0009010000000000000001 /* Project object */;
 			proxyType = 1;
-            remoteGlobalIDString = AA0005010000000000000001;
-            remoteInfo = LyricTapper;
+			remoteGlobalIDString = AA0005010000000000000001;
+			remoteInfo = LyricTapper;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -103,24 +102,24 @@ AA00F10D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift in Sources 
 		AA00001C0000000000000001 /* LyricTapper/Views/PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/PlayerView.swift; sourceTree = SOURCE_ROOT; };
 		AA00001D0000000000000001 /* LyricTapper/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = LyricTapper/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		AA00001E0000000000000001 /* Lyric Tapper/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Lyric Tapper/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
-ABF1F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/ImageSequenceService.swift; sourceTree = SOURCE_ROOT; };
-ABF1F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/ImageDecodeCache.swift; sourceTree = SOURCE_ROOT; };
-ABF1F0030000000000000001 /* LyricTapper/Views/HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/HomeView.swift; sourceTree = SOURCE_ROOT; };
-ABF1F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/LoadImagesView.swift; sourceTree = SOURCE_ROOT; };
-ABF1F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageFlashTapView.swift; sourceTree = SOURCE_ROOT; };
-ABF1F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageFlashEditView.swift; sourceTree = SOURCE_ROOT; };
-ABF1F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageFlashExportView.swift; sourceTree = SOURCE_ROOT; };
-AA00F0010000000000000001 /* LyricTapper/Models/ProjectV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Models/ProjectV2.swift; sourceTree = SOURCE_ROOT; };
-AA00F0020000000000000001 /* LyricTapper/Services/ProjectManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/ProjectManager.swift; sourceTree = SOURCE_ROOT; };
-AA00F0030000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ProjectsLandingView.swift; sourceTree = SOURCE_ROOT; };
-AA00011D0000000000000001 /* LyricTapper/Views/DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/DashboardView.swift; sourceTree = SOURCE_ROOT; };
-AA00F0090000000000000001 /* LyricTapper/Views/MergeExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/MergeExportView.swift; sourceTree = SOURCE_ROOT; };
-AA00F0070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/OverlayRenderService.swift; sourceTree = SOURCE_ROOT; };
-AA00F00A0000000000000001 /* LyricTapper/Views/LyricTakesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/LyricTakesView.swift; sourceTree = SOURCE_ROOT; };
-AA00F00B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageTakesView.swift; sourceTree = SOURCE_ROOT; };
-AA00F0080000000000000001 /* LyricTapper/Services/CompositorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/CompositorService.swift; sourceTree = SOURCE_ROOT; };
-AA00F00C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/AudioTrimView.swift; sourceTree = SOURCE_ROOT; };
-AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/WaveformTrimView.swift; sourceTree = SOURCE_ROOT; };
+		AA00011D0000000000000001 /* LyricTapper/Views/DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/DashboardView.swift; sourceTree = SOURCE_ROOT; };
+		AA00F0010000000000000001 /* LyricTapper/Models/ProjectV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Models/ProjectV2.swift; sourceTree = SOURCE_ROOT; };
+		AA00F0020000000000000001 /* LyricTapper/Services/ProjectManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/ProjectManager.swift; sourceTree = SOURCE_ROOT; };
+		AA00F0030000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ProjectsLandingView.swift; sourceTree = SOURCE_ROOT; };
+		AA00F0070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/OverlayRenderService.swift; sourceTree = SOURCE_ROOT; };
+		AA00F0080000000000000001 /* LyricTapper/Services/CompositorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/CompositorService.swift; sourceTree = SOURCE_ROOT; };
+		AA00F0090000000000000001 /* LyricTapper/Views/MergeExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/MergeExportView.swift; sourceTree = SOURCE_ROOT; };
+		AA00F00A0000000000000001 /* LyricTapper/Views/LyricTakesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/LyricTakesView.swift; sourceTree = SOURCE_ROOT; };
+		AA00F00B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageTakesView.swift; sourceTree = SOURCE_ROOT; };
+		AA00F00C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/AudioTrimView.swift; sourceTree = SOURCE_ROOT; };
+		AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/WaveformTrimView.swift; sourceTree = SOURCE_ROOT; };
+		ABF1F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/ImageSequenceService.swift; sourceTree = SOURCE_ROOT; };
+		ABF1F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/ImageDecodeCache.swift; sourceTree = SOURCE_ROOT; };
+		ABF1F0030000000000000001 /* LyricTapper/Views/HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/HomeView.swift; sourceTree = SOURCE_ROOT; };
+		ABF1F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/LoadImagesView.swift; sourceTree = SOURCE_ROOT; };
+		ABF1F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageFlashTapView.swift; sourceTree = SOURCE_ROOT; };
+		ABF1F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageFlashEditView.swift; sourceTree = SOURCE_ROOT; };
+		ABF1F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageFlashExportView.swift; sourceTree = SOURCE_ROOT; };
 		C99F86772E9AF3AE00627C27 /* LyricTapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LyricTapper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99F867C2E9AF40B00627C27 /* Lyric Tapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lyric Tapper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99F868C2E9AF40D00627C27 /* Lyric TapperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Lyric TapperTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,13 +134,6 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 
 /* Begin PBXFrameworksBuildPhase section */
 		AA0002010000000000000001 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C99F86792E9AF40B00627C27 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -226,8 +218,8 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 				AA00000B0000000000000001 /* LyricTapper/Services/ProjectStore.swift */,
 				AA00000C0000000000000001 /* LyricTapper/Services/ExportService.swift */,
 				AA0000180000000000000001 /* LyricTapper/Services/Logger.swift */,
-                ABF1F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift */,
-                ABF1F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift */,
+				ABF1F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift */,
+				ABF1F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift */,
 				AA00F0070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift */,
 				AA00F0020000000000000001 /* LyricTapper/Services/ProjectManager.swift */,
 				AA00F0080000000000000001 /* LyricTapper/Services/CompositorService.swift */,
@@ -250,13 +242,13 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 				AA00001A0000000000000001 /* LyricTapper/Views/WaveformScrubView.swift */,
 				AA00001B0000000000000001 /* LyricTapper/Views/SystemFontPickerView.swift */,
 				AA00001C0000000000000001 /* LyricTapper/Views/PlayerView.swift */,
-                ABF1F0030000000000000001 /* LyricTapper/Views/HomeView.swift */,
-                ABF1F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift */,
-                ABF1F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift */,
-                ABF1F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift */,
-                ABF1F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift */,
+				ABF1F0030000000000000001 /* LyricTapper/Views/HomeView.swift */,
+				ABF1F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift */,
+				ABF1F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift */,
+				ABF1F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift */,
+				ABF1F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift */,
 				AA00F0030000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift */,
-				AA00011D0000000000000001 /* LyricTapper/Views/MergeExportView.swift */,
+				AA00011D0000000000000001 /* LyricTapper/Views/DashboardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -265,6 +257,11 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 			isa = PBXGroup;
 			children = (
 				AA00001E0000000000000001 /* Lyric Tapper/Assets.xcassets */,
+				AA00F0090000000000000001 /* LyricTapper/Views/MergeExportView.swift */,
+				AA00F00A0000000000000001 /* LyricTapper/Views/LyricTakesView.swift */,
+				AA00F00B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift */,
+				AA00F00C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift */,
+				AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -289,7 +286,6 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 			productReference = C99F86772E9AF3AE00627C27 /* LyricTapper.app */;
 			productType = "com.apple.product-type.application";
 		};
-/* Removed duplicate app target "Lyric Tapper" */
 		C99F868B2E9AF40D00627C27 /* Lyric TapperTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C99F86A52E9AF40D00627C27 /* Build configuration list for PBXNativeTarget "Lyric TapperTests" */;
@@ -347,13 +343,6 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
-					AA0005010000000000000001 = {
-						DevelopmentTeam = 49F95M9WQN;
-						ProvisioningStyle = Automatic;
-					};
-					C99F867B2E9AF40B00627C27 = {
-						CreatedOnToolsVersion = 16.2;
-					};
 					C99F868B2E9AF40D00627C27 = {
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = C99F867B2E9AF40B00627C27;
@@ -377,8 +366,8 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 			projectRoot = "";
 			targets = (
 				AA0005010000000000000001 /* LyricTapper */,
-			C99F868B2E9AF40D00627C27 /* Lyric TapperTests */,
-			C99F86952E9AF40D00627C27 /* Lyric TapperUITests */,
+				C99F868B2E9AF40D00627C27 /* Lyric TapperTests */,
+				C99F86952E9AF40D00627C27 /* Lyric TapperUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -389,14 +378,6 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 			buildActionMask = 2147483647;
 			files = (
 				AA00011B0000000000000001 /* LyricTapper/Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C99F867A2E9AF40B00627C27 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				AA00011C0000000000000001 /* Lyric Tapper/Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,31 +428,24 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 				AA0001180000000000000001 /* LyricTapper/Views/WaveformScrubView.swift in Sources */,
 				AA0001190000000000000001 /* LyricTapper/Views/SystemFontPickerView.swift in Sources */,
 				AA00011A0000000000000001 /* LyricTapper/Views/PlayerView.swift in Sources */,
-                ABF2F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift in Sources */,
-                ABF2F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift in Sources */,
-                ABF2F0030000000000000001 /* LyricTapper/Views/HomeView.swift in Sources */,
-                ABF2F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift in Sources */,
-                ABF2F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift in Sources */,
-                ABF2F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift in Sources */,
+				ABF2F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift in Sources */,
+				ABF2F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift in Sources */,
+				ABF2F0030000000000000001 /* LyricTapper/Views/HomeView.swift in Sources */,
+				ABF2F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift in Sources */,
+				ABF2F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift in Sources */,
+				ABF2F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift in Sources */,
 				ABF2F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift in Sources */,
-                AA00F1040000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift in Sources */,
+				AA00F1040000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift in Sources */,
 				AA00F1010000000000000001 /* LyricTapper/Models/ProjectV2.swift in Sources */,
 				AA00F1020000000000000001 /* LyricTapper/Services/ProjectManager.swift in Sources */,
-                AA00F1050000000000000001 /* LyricTapper/Views/DashboardView.swift in Sources */,
-                AA00F1060000000000000001 /* LyricTapper/Views/MergeExportView.swift in Sources */,
-                AA00F1070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift in Sources */,
-                AA00F1080000000000000001 /* LyricTapper/Services/CompositorService.swift in Sources */,
-                AA00F10A0000000000000001 /* LyricTapper/Views/LyricTakesView.swift in Sources */,
-                AA00F10B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift in Sources */,
-                AA00F10C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift in Sources */,
-                AA00F10D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C99F86782E9AF40B00627C27 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				AA00F1050000000000000001 /* LyricTapper/Views/DashboardView.swift in Sources */,
+				AA00F1060000000000000001 /* LyricTapper/Views/MergeExportView.swift in Sources */,
+				AA00F1070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift in Sources */,
+				AA00F1080000000000000001 /* LyricTapper/Services/CompositorService.swift in Sources */,
+				AA00F10A0000000000000001 /* LyricTapper/Views/LyricTakesView.swift in Sources */,
+				AA00F10B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift in Sources */,
+				AA00F10C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift in Sources */,
+				AA00F10D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,14 +466,14 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-        C99F868E2E9AF40D00627C27 /* PBXTargetDependency */ = {
+		C99F868E2E9AF40D00627C27 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-            target = AA0005010000000000000001 /* LyricTapper */;
+			target = AA0005010000000000000001 /* LyricTapper */;
 			targetProxy = C99F868D2E9AF40D00627C27 /* PBXContainerItemProxy */;
 		};
 		C99F86982E9AF40D00627C27 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-            target = AA0005010000000000000001 /* LyricTapper */;
+			target = AA0005010000000000000001 /* LyricTapper */;
 			targetProxy = C99F86972E9AF40D00627C27 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -630,8 +604,9 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.3.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.noise.LyricTapper.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noise.LyricTapper.v3.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				APP_DISPLAY_NAME = "LyricTapper V3 Dev";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -645,10 +620,11 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = LyricTapper/Entitlements/LyricTapper.mas.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 49F95M9WQN;
 				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 49F95M9WQN;
 				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LyricTapper/Info.plist;
@@ -660,97 +636,12 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.noise.LyricTapper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				APP_DISPLAY_NAME = "LyricTapper";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		C99F869E2E9AF40D00627C27 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "Lyric Tapper/Lyric_Tapper.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Lyric Tapper/Preview Content\"";
-				DEVELOPMENT_TEAM = 49F95M9WQN;
-				ENABLE_PREVIEWS = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025. All rights reserved.";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = "Noise.Lyric-Tapper.dev";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		C99F869F2E9AF40D00627C27 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "Lyric Tapper/Lyric_Tapper.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_ASSET_PATHS = "\"Lyric Tapper/Preview Content\"";
-				DEVELOPMENT_TEAM = 49F95M9WQN;
-				ENABLE_PREVIEWS = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025. All rights reserved.";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = "Noise.Lyric-Tapper.dev";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -889,15 +780,6 @@ AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */ = {isa =
 			buildConfigurations = (
 				AA000B010000000000000001 /* Debug */,
 				AA000B020000000000000001 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		C99F86A42E9AF40D00627C27 /* Build configuration list for PBXNativeTarget "Lyric Tapper" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C99F869E2E9AF40D00627C27 /* Debug */,
-				C99F869F2E9AF40D00627C27 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
