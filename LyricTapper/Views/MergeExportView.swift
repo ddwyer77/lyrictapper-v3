@@ -132,7 +132,7 @@ struct MergeExportView: View {
             let panel = NSSavePanel(); panel.allowedFileTypes = ["mp4"]; panel.nameFieldStringValue = "scramble_merge.mp4"
             panel.begin { resp in
                 guard resp == .OK, let url = panel.url else { return }
-                ScrambleExportService.exportScramble(audioURL: audioURL, take: take, destinationURL: url, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: imageOffsetMs, enableLyrics: enableLyrics) { result in
+                _ScrambleExportShim.export(audioURL: audioURL, take: take, destinationURL: url, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: imageOffsetMs, enableLyrics: enableLyrics) { result in
                     DispatchQueue.main.async { handleExportResult(result) }
                 }
             }
@@ -165,7 +165,7 @@ struct MergeExportView: View {
             }
         case .scrambleClip:
             guard let takeId = app.projectV2.tracks.scramble.currentTakeId, let take = app.projectV2.tracks.scramble.takes.first(where: { $0.id == takeId }) else { status = "Select a Scramble take"; return }
-            ScrambleExportService.renderScramblePreview(audioURL: audioURL, take: take, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: imageOffsetMs, enableLyrics: enableLyrics) { result in
+            _ScrambleExportShim.preview(audioURL: audioURL, take: take, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: imageOffsetMs, enableLyrics: enableLyrics) { result in
                 DispatchQueue.main.async { handlePreviewResult(result) }
             }
         }
@@ -204,6 +204,28 @@ struct MergeExportView: View {
         guard let data = app.project.audioPathBookmark, let url = BookmarkService.resolveBookmark(data) else { return nil }
         if url.startAccessingSecurityScopedResource() { return url }
         return nil
+    }
+}
+
+// Temporary shim resolves when ScrambleExportService is not yet linked into target
+private enum _ScrambleExportShim {
+    static func preview(audioURL: URL, take: TrackScrambleTake, lyricTake: TrackLyricTake?, lyricOffsetMs: Int, backgroundOffsetMs: Int, enableLyrics: Bool, completion: @escaping (Result<URL, Error>) -> Void) {
+        #if canImport(Foundation)
+        if let _ = NSClassFromString("LyricTapper.ScrambleExportService") as AnyObject? {
+            ScrambleExportService.renderScramblePreview(audioURL: audioURL, take: take, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: backgroundOffsetMs, enableLyrics: enableLyrics, completion: completion)
+            return
+        }
+        #endif
+        completion(.failure(NSError(domain: "Stub", code: -1, userInfo: [NSLocalizedDescriptionKey: "Scramble exporter not linked"])))
+    }
+    static func export(audioURL: URL, take: TrackScrambleTake, destinationURL: URL, lyricTake: TrackLyricTake?, lyricOffsetMs: Int, backgroundOffsetMs: Int, enableLyrics: Bool, completion: @escaping (Result<URL, Error>) -> Void) {
+        #if canImport(Foundation)
+        if let _ = NSClassFromString("LyricTapper.ScrambleExportService") as AnyObject? {
+            ScrambleExportService.exportScramble(audioURL: audioURL, take: take, destinationURL: destinationURL, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: backgroundOffsetMs, enableLyrics: enableLyrics, completion: completion)
+            return
+        }
+        #endif
+        completion(.failure(NSError(domain: "Stub", code: -1, userInfo: [NSLocalizedDescriptionKey: "Scramble exporter not linked"])))
     }
 }
 
