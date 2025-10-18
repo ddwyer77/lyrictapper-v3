@@ -83,10 +83,10 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
     writer.startWriting(); writer.startSession(atSourceTime: .zero)
     guard let pool = adaptor.pixelBufferPool else { throw ScrambleExportServiceError.writerFailed }
 
-    // Prepare intervals and cuts if missing
-    let intervals = take.intervals.isEmpty ? ScramblePlannerService.intervals(from: take.tapTimestamps, audioDuration: duration) : take.intervals
-    let videosList: [(VideoFileID, VideoMeta)] = take.videoCatalog.map { ($0.key, $0.value) }
-    let cuts: [ScrambleCut] = take.cuts.isEmpty ? ScramblePlannerService.planCuts(intervals: intervals, videos: videosList, seed: take.shuffleSeed, avoidanceSec: take.avoidanceWindowSec) : take.cuts
+    // Prepare intervals and cuts if missing (use local fallbacks to avoid cross-file dependency)
+    let intervals: [VideoInterval] = take.intervals.isEmpty ? _localIntervals(from: take.tapTimestamps, audioDuration: duration) : take.intervals
+    let videosList: [(id: VideoFileID, meta: VideoMeta)] = take.videoCatalog.map { ($0.key, $0.value) }
+    let cuts: [ScrambleCut] = take.cuts.isEmpty ? _localPlanCuts(intervals: intervals, videos: videosList, seed: take.shuffleSeed, avoidance: take.avoidanceWindowSec) : take.cuts
 
     // Resolve URLs and hold scopes for used videos
     var idToURL: [VideoFileID: URL] = [:]
@@ -167,8 +167,6 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
         }
         let output = AVAssetReaderTrackOutput(track: track, outputSettings: [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA])
         output.alwaysCopiesSampleData = false
-        output.supportsRandomAccess = false
-        output.reset(forReadingTimeRanges: [NSValue(timeRange: timeRange)])
         if reader.canAdd(output) { reader.add(output) }
         reader.timeRange = timeRange
         guard reader.startReading() else {
@@ -346,6 +344,53 @@ private func muxAudioVideo(audioURL: URL, videoURL: URL, destinationURL: URL) th
     export.shouldOptimizeForNetworkUse = true
     let g = DispatchGroup(); var err: Error?; g.enter(); export.exportAsynchronously { if export.status != .completed { err = export.error ?? ScrambleExportServiceError.compositionFailed }; g.leave() }; g.wait()
     if let e = err { throw e }
+}
+
+// MARK: - Local planning fallbacks (seeded but minimal)
+
+private func _localIntervals(from taps: [Double], audioDuration: Double) -> [VideoInterval] {
+    guard audioDuration > 0, !taps.isEmpty else { return [] }
+    var out: [VideoInterval] = []
+    var lastEnd = 0.0
+    for i in 0..<taps.count {
+        let s = max(0.0, min(taps[i], audioDuration))
+        let e = (i + 1 < taps.count) ? max(0.0, min(taps[i+1], audioDuration)) : audioDuration
+        let start = max(s, lastEnd)
+        let end = max(e, start)
+        out.append(VideoInterval(start: start, end: end))
+        lastEnd = end
+    }
+    return out
+}
+
+private struct _RNG { var state: UInt64; mutating func next() -> UInt64 { var x = state; x ^= x >> 12; x ^= x << 25; x ^= x >> 27; state = x; return x &* 2685821657736338717 } ; mutating func nextInt(_ n: Int) -> Int { Int(next() % UInt64(max(1,n))) } ; mutating func next01() -> Double { Double(next()) / Double(UInt64.max) } }
+
+private func _localPlanCuts(intervals: [VideoInterval], videos: [(id: VideoFileID, meta: VideoMeta)], seed: UInt64, avoidance: Double) -> [ScrambleCut] {
+    guard !videos.isEmpty else { return [] }
+    var rng = _RNG(state: seed == 0 ? 0x9E3779B97F4A7C15 : seed)
+    var usedStarts: [VideoFileID: [Double]] = [:]
+    var out: [ScrambleCut] = []
+    for (i, iv) in intervals.enumerated() {
+        let seg = max(0.0, iv.end - iv.start)
+        // try up to N times to find a video that fits and avoids recent starts
+        var chosen: (VideoFileID, Double)? = nil
+        for _ in 0..<max(8, videos.count * 2) {
+            let pick = videos[rng.nextInt(videos.count)]
+            if seg < pick.meta.duration {
+                let slack = max(0.0, pick.meta.duration - seg)
+                let start = (slack > 0) ? rng.next01() * slack : 0
+                let history = usedStarts[pick.id] ?? []
+                if !history.contains(where: { abs($0 - start) < avoidance }) { chosen = (pick.id, start); usedStarts[pick.id, default: []].append(start); break }
+            }
+        }
+        if let c = chosen {
+            out.append(ScrambleCut(intervalIndex: i, videoID: c.0, startSec: c.1))
+        } else if let long = videos.max(by: { $0.meta.duration < $1.meta.duration }) {
+            let start = max(0.0, long.meta.duration - seg)
+            out.append(ScrambleCut(intervalIndex: i, videoID: long.id, startSec: start))
+        }
+    }
+    return out
 }
 
 
