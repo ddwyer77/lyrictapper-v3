@@ -47,6 +47,8 @@ struct ProjectsLandingView: View {
                         .disabled(pickedAudioURL == nil)
                     Button("Start with Image Flash") { startWith(.imageFlash) }
                         .disabled(pickedAudioURL == nil)
+                    Button("Start with Scramble Clip") { startWith(.scrambleClip) }
+                        .disabled(pickedAudioURL == nil)
                 }
             }
 
