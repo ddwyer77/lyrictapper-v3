@@ -210,21 +210,9 @@ struct MergeExportView: View {
 // Temporary shim resolves when ScrambleExportService is not yet linked into target
 private enum _ScrambleExportShim {
     static func preview(audioURL: URL, take: TrackScrambleTake, lyricTake: TrackLyricTake?, lyricOffsetMs: Int, backgroundOffsetMs: Int, enableLyrics: Bool, completion: @escaping (Result<URL, Error>) -> Void) {
-        #if canImport(Foundation)
-        if let _ = NSClassFromString("LyricTapper.ScrambleExportService") as AnyObject? {
-            ScrambleExportService.renderScramblePreview(audioURL: audioURL, take: take, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: backgroundOffsetMs, enableLyrics: enableLyrics, completion: completion)
-            return
-        }
-        #endif
         completion(.failure(NSError(domain: "Stub", code: -1, userInfo: [NSLocalizedDescriptionKey: "Scramble exporter not linked"])))
     }
     static func export(audioURL: URL, take: TrackScrambleTake, destinationURL: URL, lyricTake: TrackLyricTake?, lyricOffsetMs: Int, backgroundOffsetMs: Int, enableLyrics: Bool, completion: @escaping (Result<URL, Error>) -> Void) {
-        #if canImport(Foundation)
-        if let _ = NSClassFromString("LyricTapper.ScrambleExportService") as AnyObject? {
-            ScrambleExportService.exportScramble(audioURL: audioURL, take: take, destinationURL: destinationURL, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: backgroundOffsetMs, enableLyrics: enableLyrics, completion: completion)
-            return
-        }
-        #endif
         completion(.failure(NSError(domain: "Stub", code: -1, userInfo: [NSLocalizedDescriptionKey: "Scramble exporter not linked"])))
     }
 }
