@@ -9,6 +9,8 @@ struct MergeExportView: View {
     @State private var status: String = ""
     @State private var lyricOffsetMs: Int = 0
     @State private var imageOffsetMs: Int = 0
+    @State private var enableLyrics: Bool = true
+    @State private var backgroundChoice: BackgroundChoice = .imageFlash
     @State private var selectedLyricTakeId: String? = nil
     @State private var selectedImageTakeId: String? = nil
     @State private var previewPlayer: AVPlayer? = nil
@@ -30,13 +32,28 @@ struct MergeExportView: View {
                     .frame(width: 260)
                 }
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Image Take").font(.headline)
-                    Picker("Image Take", selection: $selectedImageTakeId) {
-                        ForEach(app.projectV2.tracks.image.takes) { t in
-                            Text(t.name).tag(Optional(t.id))
-                        }
+                    Text("Background").font(.headline)
+                    Picker("Background", selection: $backgroundChoice) {
+                        Text("ImageFlash").tag(BackgroundChoice.imageFlash)
+                        Text("ScrambleClip").tag(BackgroundChoice.scrambleClip)
                     }
+                    .pickerStyle(.segmented)
                     .frame(width: 260)
+                    if backgroundChoice == .imageFlash {
+                        Picker("Image Take", selection: $selectedImageTakeId) {
+                            ForEach(app.projectV2.tracks.image.takes) { t in
+                                Text(t.name).tag(Optional(t.id))
+                            }
+                        }
+                        .frame(width: 260)
+                    } else {
+                        Picker("Scramble Take", selection: $selectedImageTakeId) {
+                            ForEach(app.projectV2.tracks.scramble.takes) { t in
+                                Text(t.name).tag(Optional(t.id))
+                            }
+                        }
+                        .frame(width: 260)
+                    }
                 }
                 Spacer()
             }
@@ -44,6 +61,7 @@ struct MergeExportView: View {
             HStack(spacing: 12) {
                 Stepper("Lyric Offset (ms): \(lyricOffsetMs)", value: $lyricOffsetMs, in: -5000...5000, step: 10)
                 Stepper("Image Offset (ms): \(imageOffsetMs)", value: $imageOffsetMs, in: -5000...5000, step: 10)
+                Toggle("Enable Lyrics Overlay", isOn: $enableLyrics)
                 Spacer()
                 Button("Render Preview") { renderPreview() }
                 Button("Export Final") { exportFinal() }
@@ -80,6 +98,8 @@ struct MergeExportView: View {
         .onAppear {
             selectedLyricTakeId = selectedLyricTakeId ?? app.projectV2.tracks.lyric.currentTakeId
             selectedImageTakeId = selectedImageTakeId ?? app.projectV2.tracks.image.currentTakeId ?? app.projectV2.tracks.image.takes.first?.id
+            backgroundChoice = app.projectV2.merge.backgroundChoice
+            enableLyrics = app.projectV2.merge.enableLyrics
         }
     }
 

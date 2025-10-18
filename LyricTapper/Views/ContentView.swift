@@ -61,6 +61,16 @@ struct ContentView: View {
                     ImageFlashExportView(app: app)
                     if app.showLogs { LogsPanelView(logger: app.logger) }
                 }
+            case .scrambleTakes:
+                Text("Scramble Takes - TBD")
+            case .loadVideos:
+                LoadVideosView(app: app)
+            case .scrambleTap:
+                Text("Scramble Tap - TBD")
+            case .scrambleEdit:
+                Text("Scramble Edit - TBD")
+            case .scrambleExport:
+                Text("Scramble Export - TBD")
             case .mergeExport:
                 VStack(spacing: 8) {
                     MergeExportView(app: app)

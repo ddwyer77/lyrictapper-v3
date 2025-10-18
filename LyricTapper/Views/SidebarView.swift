@@ -24,6 +24,13 @@ struct SidebarView: View {
                 Label("Edit", systemImage: "table").tag(AppState.Stage.imageEdit)
                 Label("Export", systemImage: "square.and.arrow.up").tag(AppState.Stage.imageExport)
             }
+            Section("ScrambleClip") {
+                Label("Takes", systemImage: "square.stack").tag(AppState.Stage.scrambleTakes)
+                Label("Load Videos", systemImage: "folder").tag(AppState.Stage.loadVideos)
+                Label("Tap", systemImage: "hand.tap").tag(AppState.Stage.scrambleTap)
+                Label("Edit", systemImage: "table").tag(AppState.Stage.scrambleEdit)
+                Label("Export", systemImage: "square.and.arrow.up").tag(AppState.Stage.scrambleExport)
+            }
             Section("Merge") {
                 Label("Merge & Export", systemImage: "square.stack.3d.up").tag(AppState.Stage.mergeExport)
             }

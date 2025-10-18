@@ -6,6 +6,7 @@ import UniformTypeIdentifiers
 enum ToolKind: String, Codable, CaseIterable, Identifiable {
     case lyrics
     case imageFlash
+    case scrambleClip
     var id: String { rawValue }
 }
 
@@ -28,6 +29,12 @@ final class AppState: ObservableObject {
         case imageTap
         case imageEdit
         case imageExport
+        // ScrambleClip stages
+        case scrambleTakes
+        case loadVideos
+        case scrambleTap
+        case scrambleEdit
+        case scrambleExport
         case mergeExport
         var id: String { rawValue }
     }
@@ -76,6 +83,10 @@ final class AppState: ObservableObject {
         case .imageFlash:
             // Reuse chosen audio for image flash; skip audio picker entirely
             stage = .loadImages
+            project.mode = .imageFlash
+        case .scrambleClip:
+            // Reuse chosen audio; go to load videos step
+            stage = .loadVideos
             project.mode = .imageFlash
         }
     }
