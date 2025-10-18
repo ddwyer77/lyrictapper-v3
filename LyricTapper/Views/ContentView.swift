@@ -99,19 +99,3 @@ struct ContentView: View {
 }
 
 
-
-// Temporary stubs to unblock build if ScrambleClip files are not linked into target
-// Remove once LoadVideosView/ScrambleClip* files are present in the project target.
-private struct _ScrambleStubView: View {
-    var label: String
-    var body: some View { Text("\(label) (stub)").foregroundColor(.secondary).padding() }
-}
-
-@available(macOS 13.0, *)
-struct LoadVideosView: View { let app: AppState; var body: some View { _ScrambleStubView(label: "LoadVideosView") } }
-@available(macOS 13.0, *)
-struct ScrambleClipTapView: View { let app: AppState; var body: some View { _ScrambleStubView(label: "ScrambleClipTapView") } }
-@available(macOS 13.0, *)
-struct ScrambleClipEditView: View { let app: AppState; var body: some View { _ScrambleStubView(label: "ScrambleClipEditView") } }
-@available(macOS 13.0, *)
-struct ScrambleClipExportView: View { let app: AppState; var body: some View { _ScrambleStubView(label: "ScrambleClipExportView") } }
