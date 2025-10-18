@@ -1,5 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
+import AVFoundation
 import AppKit
 
 struct LoadVideosView: View {
@@ -38,7 +39,7 @@ struct LoadVideosView: View {
             guard resp == .OK, let url = panel.url else { return }
             folderURL = url
             if let bm = try? BookmarkService.createBookmark(for: url) {
-                let (catalog, order) = VideoSequenceService.scanFolder(root: bm, includeSubfolders: includeSubfolders, skipDuplicateFilenames: skipDuplicates)
+                let (catalog, order) = _scanVideos(root: bm, includeSubfolders: includeSubfolders, skipDuplicateFilenames: skipDuplicates)
                 app.projectV2.tracks.scramble.takes.removeAll()
                 // Stash a working take in project V1-like state (we'll commit later in Tap/Edit)
                 // For now, just store catalog in project-level scratch to use during tapping
@@ -69,6 +70,40 @@ struct LoadVideosView: View {
 
     private func onContinue() {
         app.stage = .scrambleTap
+    }
+
+    // Local fallback to avoid target-link hiccups
+    private func _scanVideos(root bookmark: Data, includeSubfolders: Bool, skipDuplicateFilenames: Bool) -> ([VideoFileID: VideoMeta], [VideoFileID]) {
+        guard let rootURL = BookmarkService.resolveBookmark(bookmark) else { return ([:], []) }
+        _ = rootURL.startAccessingSecurityScopedResource(); defer { rootURL.stopAccessingSecurityScopedResource() }
+        var catalog: [VideoFileID: VideoMeta] = [:]
+        var order: [VideoFileID] = []
+        var seen: Set<String> = []
+        let fm = FileManager.default
+        let keys: [URLResourceKey] = [.isRegularFileKey, .fileSizeKey, .typeIdentifierKey]
+        let opts: FileManager.DirectoryEnumerationOptions = includeSubfolders ? [] : [.skipsSubdirectoryDescendants]
+        let en = fm.enumerator(at: rootURL, includingPropertiesForKeys: keys, options: opts)
+        let supportedExts: Set<String> = ["mov","mp4","m4v"]
+        while let url = en?.nextObject() as? URL {
+            guard let rv = try? url.resourceValues(forKeys: Set(keys)), rv.isRegularFile == true else { continue }
+            let ext = url.pathExtension.lowercased()
+            guard supportedExts.contains(ext) else { continue }
+            let name = url.lastPathComponent
+            if skipDuplicateFilenames && seen.contains(name) { continue }
+            if skipDuplicateFilenames { seen.insert(name) }
+            guard let fileBm = try? BookmarkService.createBookmark(for: url) else { continue }
+            let id = VideoFileID(urlBookmark: fileBm)
+            let asset = AVAsset(url: url)
+            let secs = CMTimeGetSeconds(asset.duration)
+            var w = 0, h = 0
+            if let track = asset.tracks(withMediaType: .video).first {
+                let natural = track.naturalSize.applying(track.preferredTransform)
+                w = Int(abs(natural.width.rounded())); h = Int(abs(natural.height.rounded()))
+            }
+            let meta = VideoMeta(filename: name, duration: secs.isFinite ? secs : 0, naturalWidth: w, naturalHeight: h, fileSize: (rv.fileSize != nil ? Int64(rv.fileSize!) : nil), uti: ext)
+            catalog[id] = meta; order.append(id)
+        }
+        return (catalog, order)
     }
 }
 

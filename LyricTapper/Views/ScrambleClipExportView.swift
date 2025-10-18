@@ -58,7 +58,8 @@ struct ScrambleClipExportView: View {
     private func renderPreview() {
         guard let audioURL = resolveAudioURL(), let take = currentTake() else { status = "Select audio and take"; return }
         status = "Rendering preview…"
-        ScrambleExportService.renderScramblePreview(audioURL: audioURL, take: take) { result in
+        let lyricTake = app.projectV2.tracks.lyric.takes.first(where: { $0.id == app.projectV2.tracks.lyric.currentTakeId })
+        ScrambleExportService.renderScramblePreview(audioURL: audioURL, take: take, lyricTake: lyricTake, lyricOffsetMs: 0, backgroundOffsetMs: 0, enableLyrics: true) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let url):
@@ -75,7 +76,8 @@ struct ScrambleClipExportView: View {
         panel.begin { resp in
             guard resp == .OK, let url = panel.url else { return }
             status = "Exporting…"
-            ScrambleExportService.exportScramble(audioURL: audioURL, take: take, destinationURL: url) { result in
+            let lyricTake = app.projectV2.tracks.lyric.takes.first(where: { $0.id == app.projectV2.tracks.lyric.currentTakeId })
+            ScrambleExportService.exportScramble(audioURL: audioURL, take: take, destinationURL: url, lyricTake: lyricTake, lyricOffsetMs: 0, backgroundOffsetMs: 0, enableLyrics: true) { result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success: status = "Exported: \(url.lastPathComponent)"
@@ -91,8 +93,8 @@ struct ScrambleClipExportView: View {
         var take = app.projectV2.tracks.scramble.takes[idx]
         take.shuffleSeed = UInt64.random(in: 1...UInt64.max)
         let videos = take.videoCatalog.map { ($0.key, $0.value) }
-        if take.intervals.isEmpty { take.intervals = ScramblePlannerService.intervals(from: take.tapTimestamps, audioDuration: app.project.audioDuration) }
-        take.cuts = ScramblePlannerService.planCuts(intervals: take.intervals, videos: videos, seed: take.shuffleSeed, avoidanceSec: take.avoidanceWindowSec)
+        if take.intervals.isEmpty { take.intervals = _localIntervals(from: take.tapTimestamps, audioDuration: app.project.audioDuration) }
+        take.cuts = _localPlanCuts(intervals: take.intervals, videos: videos, seed: take.shuffleSeed, avoidance: take.avoidanceWindowSec)
         app.projectV2.tracks.scramble.takes[idx] = take
         status = "Reshuffled"
     }

@@ -99,9 +99,9 @@ struct ScrambleClipTapView: View {
     private func appendTap(_ t: Double) {
         guard var take = currentTake, let idx = currentTakeIndex else { return }
         take.tapTimestamps.append(t)
-        take.intervals = ScramblePlannerService.intervals(from: take.tapTimestamps, audioDuration: app.project.audioDuration)
+        take.intervals = _localIntervals(from: take.tapTimestamps, audioDuration: app.project.audioDuration)
         let videos = take.videoCatalog.map { ($0.key, $0.value) }
-        take.cuts = ScramblePlannerService.planCuts(intervals: take.intervals, videos: videos, seed: take.shuffleSeed, avoidanceSec: take.avoidanceWindowSec)
+        take.cuts = _localPlanCuts(intervals: take.intervals, videos: videos, seed: take.shuffleSeed, avoidance: take.avoidanceWindowSec)
         app.projectV2.tracks.scramble.takes[idx] = take
     }
 
@@ -115,8 +115,8 @@ struct ScrambleClipTapView: View {
         guard let idx = currentTakeIndex else { return }
         var take = app.projectV2.tracks.scramble.takes[idx]
         // Ensure name uniqueness and finalize intervals/cuts
-        if take.intervals.isEmpty { take.intervals = ScramblePlannerService.intervals(from: take.tapTimestamps, audioDuration: app.project.audioDuration) }
-        if take.cuts.isEmpty { take.cuts = ScramblePlannerService.planCuts(intervals: take.intervals, videos: take.videoCatalog.map { ($0.key, $0.value) }, seed: take.shuffleSeed, avoidanceSec: take.avoidanceWindowSec) }
+        if take.intervals.isEmpty { take.intervals = _localIntervals(from: take.tapTimestamps, audioDuration: app.project.audioDuration) }
+        if take.cuts.isEmpty { take.cuts = _localPlanCuts(intervals: take.intervals, videos: take.videoCatalog.map { ($0.key, $0.value) }, seed: take.shuffleSeed, avoidance: take.avoidanceWindowSec) }
         if !take.name.hasPrefix("Scramble-Take-") { take.name = nextTakeName() }
         app.projectV2.tracks.scramble.takes[idx] = take
     }
