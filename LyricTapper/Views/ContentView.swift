@@ -66,11 +66,20 @@ struct ContentView: View {
             case .loadVideos:
                 LoadVideosView(app: app)
             case .scrambleTap:
-                Text("Scramble Tap - TBD")
+                VStack(spacing: 8) {
+                    ScrambleClipTapView(app: app)
+                    if app.showLogs { LogsPanelView(logger: app.logger) }
+                }
             case .scrambleEdit:
-                Text("Scramble Edit - TBD")
+                VStack(spacing: 8) {
+                    ScrambleClipEditView(app: app)
+                    if app.showLogs { LogsPanelView(logger: app.logger) }
+                }
             case .scrambleExport:
-                Text("Scramble Export - TBD")
+                VStack(spacing: 8) {
+                    ScrambleClipExportView(app: app)
+                    if app.showLogs { LogsPanelView(logger: app.logger) }
+                }
             case .mergeExport:
                 VStack(spacing: 8) {
                     MergeExportView(app: app)
