@@ -99,3 +99,15 @@ struct ContentView: View {
 }
 
 
+// Temporary ScrambleClip stubs to unblock compile until Xcode links the real files.
+// Once the real ScrambleClip views are added to the target, we'll remove these.
+private struct _ScrambleStubView: View {
+    var label: String
+    var body: some View { Text("\(label) (stub)").foregroundColor(.secondary).padding() }
+}
+
+struct LoadVideosView: View { let app: AppState; var body: some View { _ScrambleStubView(label: "LoadVideosView") } }
+struct ScrambleClipTapView: View { let app: AppState; var body: some View { _ScrambleStubView(label: "ScrambleClipTapView") } }
+struct ScrambleClipEditView: View { let app: AppState; var body: some View { _ScrambleStubView(label: "ScrambleClipEditView") } }
+struct ScrambleClipExportView: View { let app: AppState; var body: some View { _ScrambleStubView(label: "ScrambleClipExportView") } }
+
