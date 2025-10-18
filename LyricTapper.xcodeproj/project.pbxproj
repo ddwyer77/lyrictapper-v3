@@ -60,6 +60,7 @@
         C9B100050000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100050000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift */; };
         C9B100060000000000000001 /* LyricTapper/Services/VideoSequenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100060000000000000001 /* LyricTapper/Services/VideoSequenceService.swift */; };
         C97678F42EA343DD007A5A9B /* ScrambleExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97678F32EA343DD007A5A9B /* ScrambleExportService.swift */; };
+		D1A0A0010000000000000001 /* LyricTapper/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA00001D0000000000000001 /* LyricTapper/Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -398,6 +399,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1A0A0010000000000000001 /* LyricTapper/Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
