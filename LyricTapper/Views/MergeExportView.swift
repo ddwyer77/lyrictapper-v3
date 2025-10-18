@@ -105,37 +105,35 @@ struct MergeExportView: View {
 
     private func exportFinal() {
         guard let audioURL = resolveAudioURL() else { status = "Select accessible audio first"; return }
-        // Offsets not yet applied in compositor; future step will shift intervals/timings non-destructively
         let settings = RenderSettings(fps: 30, width: 1080, height: 1920)
-        // Resolve takes based on current selections
-        let imageTake = app.projectV2.tracks.image.takes.first(where: { $0.id == (selectedImageTakeId ?? app.projectV2.tracks.image.currentTakeId) })
-        let intervals: [ImageInterval]
-        if let t = imageTake, !t.intervals.isEmpty {
-            intervals = t.intervals
-        } else if let t = imageTake {
-            // Compute on the fly from take taps and chosen order if intervals missing
-            intervals = TimingService.computeImageIntervals(
-                taps: t.tapTimestamps,
-                audioDuration: app.project.audioDuration,
-                imageOrder: t.chosenOrder
-            )
-        } else {
-            intervals = app.project.imageIntervals
-        }
         var lyricTake: TrackLyricTake? = app.projectV2.tracks.lyric.takes.first(where: { $0.id == (selectedLyricTakeId ?? app.projectV2.tracks.lyric.currentTakeId) })
-        // Fallback: if no current lyric take (or empty timings), build from v1 state
-        if lyricTake == nil || (lyricTake?.timings.isEmpty == true) {
-            lyricTake = makeLyricTakeFromV1()
-        }
+        if lyricTake == nil || (lyricTake?.timings.isEmpty == true) { lyricTake = makeLyricTakeFromV1() }
         status = "Exporting…"
-        CompositorService.exportFinal(audioURL: audioURL, imageIntervals: intervals, settings: settings, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, imageOffsetMs: imageOffsetMs) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let url):
-                    status = "Exported: \(url.lastPathComponent)"
-                    NSWorkspace.shared.activateFileViewerSelecting([url])
-                case .failure(let err):
-                    status = "Export failed: \(err.localizedDescription)"
+        switch backgroundChoice {
+        case .imageFlash:
+            let imageTake = app.projectV2.tracks.image.takes.first(where: { $0.id == (selectedImageTakeId ?? app.projectV2.tracks.image.currentTakeId) })
+            let intervals: [ImageInterval]
+            if let t = imageTake, !t.intervals.isEmpty {
+                intervals = t.intervals
+            } else if let t = imageTake {
+                intervals = TimingService.computeImageIntervals(
+                    taps: t.tapTimestamps,
+                    audioDuration: app.project.audioDuration,
+                    imageOrder: t.chosenOrder
+                )
+            } else {
+                intervals = app.project.imageIntervals
+            }
+            CompositorService.exportFinal(audioURL: audioURL, imageIntervals: intervals, settings: settings, lyricTake: enableLyrics ? lyricTake : nil, lyricOffsetMs: lyricOffsetMs, imageOffsetMs: imageOffsetMs) { result in
+                DispatchQueue.main.async { handleExportResult(result) }
+            }
+        case .scrambleClip:
+            guard let takeId = app.projectV2.tracks.scramble.currentTakeId, let take = app.projectV2.tracks.scramble.takes.first(where: { $0.id == takeId }) else { status = "Select a Scramble take"; return }
+            let panel = NSSavePanel(); panel.allowedFileTypes = ["mp4"]; panel.nameFieldStringValue = "scramble_merge.mp4"
+            panel.begin { resp in
+                guard resp == .OK, let url = panel.url else { return }
+                ScrambleExportService.exportScramble(audioURL: audioURL, take: take, destinationURL: url, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: imageOffsetMs, enableLyrics: enableLyrics) { result in
+                    DispatchQueue.main.async { handleExportResult(result) }
                 }
             }
         }
@@ -144,32 +142,46 @@ struct MergeExportView: View {
     private func renderPreview() {
         guard let audioURL = resolveAudioURL() else { status = "Select accessible audio first"; return }
         let settings = RenderSettings(fps: 30, width: 1080, height: 1920)
-        let imageTake = app.projectV2.tracks.image.takes.first(where: { $0.id == (selectedImageTakeId ?? app.projectV2.tracks.image.currentTakeId) })
-        let intervals: [ImageInterval]
-        if let t = imageTake, !t.intervals.isEmpty {
-            intervals = t.intervals
-        } else if let t = imageTake {
-            intervals = TimingService.computeImageIntervals(
-                taps: t.tapTimestamps,
-                audioDuration: app.project.audioDuration,
-                imageOrder: t.chosenOrder
-            )
-        } else {
-            intervals = app.project.imageIntervals
-        }
         var lyricTake: TrackLyricTake? = app.projectV2.tracks.lyric.takes.first(where: { $0.id == (selectedLyricTakeId ?? app.projectV2.tracks.lyric.currentTakeId) })
         if lyricTake == nil || (lyricTake?.timings.isEmpty == true) { lyricTake = makeLyricTakeFromV1() }
         status = "Rendering preview…"
-        CompositorService.exportFinal(audioURL: audioURL, imageIntervals: intervals, settings: settings, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, imageOffsetMs: imageOffsetMs) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let url):
-                    status = "Preview ready"
-                    previewPlayer = AVPlayer(url: url)
-                case .failure(let err):
-                    status = "Preview failed: \(err.localizedDescription)"
-                }
+        switch backgroundChoice {
+        case .imageFlash:
+            let imageTake = app.projectV2.tracks.image.takes.first(where: { $0.id == (selectedImageTakeId ?? app.projectV2.tracks.image.currentTakeId) })
+            let intervals: [ImageInterval]
+            if let t = imageTake, !t.intervals.isEmpty {
+                intervals = t.intervals
+            } else if let t = imageTake {
+                intervals = TimingService.computeImageIntervals(
+                    taps: t.tapTimestamps,
+                    audioDuration: app.project.audioDuration,
+                    imageOrder: t.chosenOrder
+                )
+            } else {
+                intervals = app.project.imageIntervals
             }
+            CompositorService.exportFinal(audioURL: audioURL, imageIntervals: intervals, settings: settings, lyricTake: enableLyrics ? lyricTake : nil, lyricOffsetMs: lyricOffsetMs, imageOffsetMs: imageOffsetMs) { result in
+                DispatchQueue.main.async { handlePreviewResult(result) }
+            }
+        case .scrambleClip:
+            guard let takeId = app.projectV2.tracks.scramble.currentTakeId, let take = app.projectV2.tracks.scramble.takes.first(where: { $0.id == takeId }) else { status = "Select a Scramble take"; return }
+            ScrambleExportService.renderScramblePreview(audioURL: audioURL, take: take, lyricTake: lyricTake, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: imageOffsetMs, enableLyrics: enableLyrics) { result in
+                DispatchQueue.main.async { handlePreviewResult(result) }
+            }
+        }
+    }
+
+    private func handlePreviewResult(_ result: Result<URL, Error>) {
+        switch result {
+        case .success(let url): status = "Preview ready"; previewPlayer = AVPlayer(url: url)
+        case .failure(let err): status = "Preview failed: \(err.localizedDescription)"
+        }
+    }
+
+    private func handleExportResult(_ result: Result<URL, Error>) {
+        switch result {
+        case .success(let url): status = "Exported: \(url.lastPathComponent)"; NSWorkspace.shared.activateFileViewerSelecting([url])
+        case .failure(let err): status = "Export failed: \(err.localizedDescription)"
         }
     }
 

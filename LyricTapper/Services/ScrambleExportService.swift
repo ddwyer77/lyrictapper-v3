@@ -12,13 +12,17 @@ enum ScrambleExportService {
     static func renderScramblePreview(
         audioURL: URL,
         take: TrackScrambleTake,
+        lyricTake: TrackLyricTake?,
+        lyricOffsetMs: Int,
+        backgroundOffsetMs: Int,
+        enableLyrics: Bool,
         completion: @escaping (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let tempDir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
                 let videoOnlyURL = tempDir.appendingPathComponent("scramble_preview_\(UUID().uuidString).mp4")
-                try renderVideoOnly(audioURL: audioURL, take: take, outputURL: videoOnlyURL, width: 1080, height: 1920, fps: 30)
+                try renderVideoOnly(audioURL: audioURL, take: take, outputURL: videoOnlyURL, width: 1080, height: 1920, fps: 30, lyricTake: enableLyrics ? lyricTake : nil, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: backgroundOffsetMs)
                 let withAudioURL = tempDir.appendingPathComponent("scramble_preview_with_audio_\(UUID().uuidString).mp4")
                 try muxAudioVideo(audioURL: audioURL, videoURL: videoOnlyURL, destinationURL: withAudioURL)
                 completion(.success(withAudioURL))
@@ -30,6 +34,10 @@ enum ScrambleExportService {
         audioURL: URL,
         take: TrackScrambleTake,
         destinationURL: URL,
+        lyricTake: TrackLyricTake?,
+        lyricOffsetMs: Int,
+        backgroundOffsetMs: Int,
+        enableLyrics: Bool,
         completion: @escaping (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global(qos: .userInitiated).async {
@@ -37,7 +45,7 @@ enum ScrambleExportService {
                 if FileManager.default.fileExists(atPath: destinationURL.path) { try? FileManager.default.removeItem(at: destinationURL) }
                 let tempDir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
                 let videoOnlyURL = tempDir.appendingPathComponent("scramble_video_\(UUID().uuidString).mp4")
-                try renderVideoOnly(audioURL: audioURL, take: take, outputURL: videoOnlyURL, width: 1080, height: 1920, fps: 30)
+                try renderVideoOnly(audioURL: audioURL, take: take, outputURL: videoOnlyURL, width: 1080, height: 1920, fps: 30, lyricTake: enableLyrics ? lyricTake : nil, lyricOffsetMs: lyricOffsetMs, backgroundOffsetMs: backgroundOffsetMs)
                 try muxAudioVideo(audioURL: audioURL, videoURL: videoOnlyURL, destinationURL: destinationURL)
                 completion(.success(destinationURL))
             } catch { completion(.failure(error)) }
@@ -47,7 +55,7 @@ enum ScrambleExportService {
 
 // MARK: - Core rendering
 
-private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: URL, width: Int, height: Int, fps: Int) throws {
+private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: URL, width: Int, height: Int, fps: Int, lyricTake: TrackLyricTake?, lyricOffsetMs: Int, backgroundOffsetMs: Int) throws {
     let duration = try audioDuration(audioURL)
     let writer = try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
     let videoSettings: [String: Any] = [
@@ -93,9 +101,33 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
 
     let frameDuration = CMTime(value: 1, timescale: CMTimeScale(max(1, fps)))
     var frameTime = CMTime.zero
+    var globalFrameIndex = 0
     let context = CIContext(options: nil)
     let rgb = CGColorSpaceCreateDeviceRGB()
     let bitmapInfo = CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
+    // Prepare lyric overlay font
+    let ctFont: CTFont? = {
+        guard let take = lyricTake else { return nil }
+        let relSize: CGFloat = CGFloat(take.fontSize)
+        let fontSize = max(12.0, relSize * CGFloat(min(width, height)))
+        let family = take.fontFamily ?? "Helvetica Neue"
+        return CTFontCreateWithName(family as CFString, fontSize, nil)
+    }()
+    let lyricOffsetSec = Double(lyricOffsetMs) / 1000.0
+    // Apply background offset: positive -> lead with black frames; negative -> skip initial frames from first intervals
+    let offsetFrames = Int((Double(backgroundOffsetMs) / 1000.0) * Double(fps))
+    if offsetFrames > 0 {
+        for _ in 0..<offsetFrames {
+            try appendBlackFrame(pool: pool, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration, overlay: { ctx in
+                if let lt = lyricTake, let f = ctFont {
+                    let tSec = Double(globalFrameIndex) / Double(fps)
+                    drawLyricOverlay(ctx: ctx, tSec: tSec + lyricOffsetSec, take: lt, width: width, height: height, font: f)
+                }
+            })
+            globalFrameIndex += 1
+        }
+    }
+    var remainingSkipFrames = max(0, -offsetFrames)
 
     for (idx, iv) in intervals.enumerated() {
         let seg = max(0.0, iv.end - iv.start)
@@ -109,11 +141,25 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
         }
         let asset = AVAsset(url: url)
         guard let track = asset.tracks(withMediaType: .video).first else {
-            for _ in 0..<framesInSeg { try appendBlackFrame(pool: pool, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration) }
+            for _ in 0..<framesInSeg { try appendBlackFrame(pool: pool, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration, overlay: { ctx in
+                if let lt = lyricTake, let f = ctFont {
+                    let tSec = Double(globalFrameIndex) / Double(fps)
+                    drawLyricOverlay(ctx: ctx, tSec: tSec + lyricOffsetSec, take: lt, width: width, height: height, font: f)
+                }
+            }); globalFrameIndex += 1 }
             continue
         }
-        let start = CMTime(seconds: cut.startSec, preferredTimescale: 600)
-        let dur = CMTime(seconds: seg, preferredTimescale: 600)
+        var framesThisSeg = framesInSeg
+        var segStartSec = cut.startSec
+        if remainingSkipFrames > 0 {
+            let drop = min(remainingSkipFrames, framesThisSeg)
+            segStartSec += Double(drop) / Double(fps)
+            framesThisSeg -= drop
+            remainingSkipFrames -= drop
+        }
+        if framesThisSeg <= 0 { continue }
+        let start = CMTime(seconds: segStartSec, preferredTimescale: 600)
+        let dur = CMTime(seconds: Double(framesThisSeg) / Double(fps), preferredTimescale: 600)
         let timeRange = CMTimeRange(start: start, duration: dur)
         guard let reader = try? AVAssetReader(asset: asset) else {
             for _ in 0..<framesInSeg { try appendBlackFrame(pool: pool, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration) }
@@ -133,7 +179,7 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
         var lastImage: CGImage? = nil
         var produced = 0
         // For each frame slot, consume next sample if available, otherwise freeze last
-        while produced < framesInSeg {
+        while produced < framesThisSeg {
             autoreleasepool {
                 if input.isReadyForMoreMediaData == false { Thread.sleep(forTimeInterval: 0.002) }
                 var cgImage: CGImage? = lastImage
@@ -146,16 +192,33 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
                     // Freeze or black
                     if lastImage == nil {
                         // draw black
-                        try? appendBlackFrame(pool: pool, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration)
+                        try? appendBlackFrame(pool: pool, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration, overlay: { ctx in
+                            if let lt = lyricTake, let f = ctFont {
+                                let tSec = Double(globalFrameIndex) / Double(fps)
+                                drawLyricOverlay(ctx: ctx, tSec: tSec + lyricOffsetSec, take: lt, width: width, height: height, font: f)
+                            }
+                        })
                     } else {
-                        try? appendDrawnFrame(image: lastImage!, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration, rgb: rgb, bitmapInfo: bitmapInfo)
+                        try? appendDrawnFrame(image: lastImage!, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration, rgb: rgb, bitmapInfo: bitmapInfo, overlay: { ctx in
+                            if let lt = lyricTake, let f = ctFont {
+                                let tSec = Double(globalFrameIndex) / Double(fps)
+                                drawLyricOverlay(ctx: ctx, tSec: tSec + lyricOffsetSec, take: lt, width: width, height: height, font: f)
+                            }
+                        })
                     }
                     produced += 1
+                    globalFrameIndex += 1
                     return
                 }
                 if let cg = cgImage {
-                    try? appendDrawnFrame(image: cg, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration, rgb: rgb, bitmapInfo: bitmapInfo)
+                    try? appendDrawnFrame(image: cg, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration, rgb: rgb, bitmapInfo: bitmapInfo, overlay: { ctx in
+                        if let lt = lyricTake, let f = ctFont {
+                            let tSec = Double(globalFrameIndex) / Double(fps)
+                            drawLyricOverlay(ctx: ctx, tSec: tSec + lyricOffsetSec, take: lt, width: width, height: height, font: f)
+                        }
+                    })
                     produced += 1
+                    globalFrameIndex += 1
                 }
             }
         }
@@ -166,7 +229,7 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
     if writer.status != .completed { throw writer.error ?? ScrambleExportServiceError.writerFailed }
 }
 
-private func appendBlackFrame(pool: CVPixelBufferPool, width: Int, height: Int, adaptor: AVAssetWriterInputPixelBufferAdaptor, input: AVAssetWriterInput, frameTime: inout CMTime, frameDuration: CMTime) throws {
+private func appendBlackFrame(pool: CVPixelBufferPool, width: Int, height: Int, adaptor: AVAssetWriterInputPixelBufferAdaptor, input: AVAssetWriterInput, frameTime: inout CMTime, frameDuration: CMTime, overlay: ((CGContext) -> Void)? = nil) throws {
     while !input.isReadyForMoreMediaData { Thread.sleep(forTimeInterval: 0.002) }
     var pbOut: CVPixelBuffer? = nil
     CVPixelBufferPoolCreatePixelBuffer(nil, pool, &pbOut)
@@ -184,13 +247,14 @@ private func appendBlackFrame(pool: CVPixelBufferPool, width: Int, height: Int, 
         )
         ctx?.setFillColor(NSColor.black.cgColor)
         ctx?.fill(CGRect(x: 0, y: 0, width: width, height: height))
+        if let ctx = ctx, let overlay = overlay { overlay(ctx) }
     }
     CVPixelBufferUnlockBaseAddress(pb, [])
     _ = adaptor.append(pb, withPresentationTime: frameTime)
     frameTime = CMTimeAdd(frameTime, frameDuration)
 }
 
-private func appendDrawnFrame(image: CGImage, width: Int, height: Int, adaptor: AVAssetWriterInputPixelBufferAdaptor, input: AVAssetWriterInput, frameTime: inout CMTime, frameDuration: CMTime, rgb: CGColorSpace, bitmapInfo: UInt32) throws {
+private func appendDrawnFrame(image: CGImage, width: Int, height: Int, adaptor: AVAssetWriterInputPixelBufferAdaptor, input: AVAssetWriterInput, frameTime: inout CMTime, frameDuration: CMTime, rgb: CGColorSpace, bitmapInfo: UInt32, overlay: ((CGContext) -> Void)? = nil) throws {
     while !input.isReadyForMoreMediaData { Thread.sleep(forTimeInterval: 0.002) }
     var pbOut: CVPixelBuffer? = nil
     CVPixelBufferPoolCreatePixelBuffer(nil, adaptor.pixelBufferPool!, &pbOut)
@@ -217,6 +281,7 @@ private func appendDrawnFrame(image: CGImage, width: Int, height: Int, adaptor: 
             ctx?.interpolationQuality = .high
             ctx?.draw(image, in: CGRect(x: 0, y: y, width: width, height: destH))
         }
+        if let ctx = ctx, let overlay = overlay { overlay(ctx) }
     }
     CVPixelBufferUnlockBaseAddress(pb, [])
     _ = adaptor.append(pb, withPresentationTime: frameTime)
@@ -231,6 +296,27 @@ private func preferredUprightTransform(for track: AVAssetTrack) -> CGAffineTrans
     let fix = CGAffineTransform(translationX: rect.width < 0 ? -rect.width : 0, y: rect.height < 0 ? -rect.height : 0)
     t = t.concatenating(fix)
     return t
+}
+
+private func drawLyricOverlay(ctx: CGContext, tSec: Double, take: TrackLyricTake, width: Int, height: Int, font: CTFont) {
+    guard !take.timings.isEmpty else { return }
+    let w = take.timings.last(where: { $0.start <= tSec && tSec < $0.end })
+    guard let word = w?.word, !word.isEmpty else { return }
+    let white = CGColor(gray: 1.0, alpha: 1.0)
+    let black = CGColor(gray: 0.0, alpha: 1.0)
+    let attrs: [NSAttributedString.Key: Any] = [
+        NSAttributedString.Key(kCTFontAttributeName as String): font,
+        NSAttributedString.Key(kCTForegroundColorAttributeName as String): white,
+        NSAttributedString.Key(kCTStrokeColorAttributeName as String): black,
+        NSAttributedString.Key(kCTStrokeWidthAttributeName as String): -2.0
+    ]
+    let attr = NSAttributedString(string: word, attributes: attrs)
+    let line = CTLineCreateWithAttributedString(attr as CFAttributedString)
+    let bounds = CTLineGetImageBounds(line, ctx)
+    let x = (CGFloat(width) - bounds.width) / 2.0 - bounds.origin.x
+    let y = (CGFloat(height) - bounds.height) / 2.0 - bounds.origin.y
+    ctx.textPosition = CGPoint(x: x, y: y)
+    CTLineDraw(line, ctx)
 }
 
 // MARK: - Audio helpers
