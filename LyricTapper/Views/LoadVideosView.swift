@@ -47,8 +47,10 @@ struct LoadVideosView: View {
                 count = order.count
                 totalDuration = order.reduce(0) { $0 + (catalog[$1]?.duration ?? 0) }
                 // Create or update a working take and set it current
+                let existingIdx = app.projectV2.tracks.scramble.takes.firstIndex(where: { $0.name == "Scramble-Take-001" })
+                let newId = existingIdx.flatMap { app.projectV2.tracks.scramble.takes[$0].id } ?? UUID().uuidString
                 var take = TrackScrambleTake(
-                    id: UUID().uuidString,
+                    id: newId,
                     name: "Scramble-Take-001",
                     videoFolderBookmark: bm,
                     includeSubfolders: includeSubfolders,
@@ -61,13 +63,12 @@ struct LoadVideosView: View {
                     previewPath: nil,
                     avoidanceWindowSec: 1.5
                 )
-                if let existingIdx = app.projectV2.tracks.scramble.takes.firstIndex(where: { $0.name == take.name }) {
-                    take.id = app.projectV2.tracks.scramble.takes[existingIdx].id
+                if let existingIdx = existingIdx {
                     app.projectV2.tracks.scramble.takes[existingIdx] = take
-                    app.projectV2.tracks.scramble.currentTakeId = take.id
+                    app.projectV2.tracks.scramble.currentTakeId = newId
                 } else {
                     app.projectV2.tracks.scramble.takes.append(take)
-                    app.projectV2.tracks.scramble.currentTakeId = take.id
+                    app.projectV2.tracks.scramble.currentTakeId = newId
                 }
             }
         }
