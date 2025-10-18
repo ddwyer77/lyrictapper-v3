@@ -7,6 +7,7 @@ struct ScrambleClipExportView: View {
     @ObservedObject var app: AppState
     @State private var previewPlayer: AVPlayer? = nil
     @State private var status: String = ""
+    @State private var playbackRate: Double = 1.0
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -16,6 +17,12 @@ struct ScrambleClipExportView: View {
                 Button("Export Video") { exportFinal() }
                 Button("Reshuffle Cuts") { reshuffle() }
                 Spacer()
+                HStack(spacing: 8) {
+                    Text("Speed")
+                    Slider(value: $playbackRate, in: 0.25...4.0, step: 0.05).frame(width: 160)
+                    Text(String(format: "%.2fx", playbackRate)).frame(width: 60, alignment: .leading)
+                    Button("Save Speed") { persistRate() }
+                }
                 Text(status).foregroundColor(.secondary)
             }
             Divider()
@@ -47,6 +54,7 @@ struct ScrambleClipExportView: View {
             if app.projectV2.tracks.scramble.currentTakeId == nil {
                 app.projectV2.tracks.scramble.currentTakeId = app.projectV2.tracks.scramble.takes.first?.id
             }
+            if let t = currentTake() { playbackRate = max(0.1, t.playbackRate ?? 1.0) }
         }
     }
 
@@ -103,6 +111,13 @@ struct ScrambleClipExportView: View {
         take.cuts = _localPlanCuts(intervals: take.intervals, videos: videos, seed: take.shuffleSeed, avoidance: take.avoidanceWindowSec)
         app.projectV2.tracks.scramble.takes[idx] = take
         status = "Reshuffled"
+    }
+
+    private func persistRate() {
+        guard let idx = app.projectV2.tracks.scramble.takes.firstIndex(where: { $0.id == app.projectV2.tracks.scramble.currentTakeId }) else { return }
+        var t = app.projectV2.tracks.scramble.takes[idx]
+        t.playbackRate = playbackRate
+        app.projectV2.tracks.scramble.takes[idx] = t
     }
 }
 

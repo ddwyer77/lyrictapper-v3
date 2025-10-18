@@ -99,6 +99,8 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
     }
     defer { scoped.forEach { $0.stopAccessingSecurityScopedResource() } }
 
+    // Speed factor: 1.0 normal; >1 faster, <1 slower. Adjust source sampling by rate
+    let rate = max(0.1, take.playbackRate ?? 1.0)
     let frameDuration = CMTime(value: 1, timescale: CMTimeScale(max(1, fps)))
     var frameTime = CMTime.zero
     var globalFrameIndex = 0
@@ -131,6 +133,7 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
 
     for (idx, iv) in intervals.enumerated() {
         let seg = max(0.0, iv.end - iv.start)
+        // We always produce frames based on output fps and audio time, but sample source at scaled time
         let framesInSeg = Int(ceil(seg * Double(fps)))
         guard idx < cuts.count else { break }
         let cut = cuts[idx]
@@ -159,7 +162,8 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
         }
         if framesThisSeg <= 0 { continue }
         let start = CMTime(seconds: segStartSec, preferredTimescale: 600)
-        let dur = CMTime(seconds: Double(framesThisSeg) / Double(fps), preferredTimescale: 600)
+        // Reader timeRange covers the portion of source to decode (scaled by rate)
+        let dur = CMTime(seconds: (Double(framesThisSeg) / Double(fps)) * (1.0 / rate), preferredTimescale: 600)
         let timeRange = CMTimeRange(start: start, duration: dur)
         guard let reader = try? AVAssetReader(asset: asset) else {
             for _ in 0..<framesInSeg { try appendBlackFrame(pool: pool, width: width, height: height, adaptor: adaptor, input: input, frameTime: &frameTime, frameDuration: frameDuration) }
@@ -182,6 +186,7 @@ private func renderVideoOnly(audioURL: URL, take: TrackScrambleTake, outputURL: 
                 if input.isReadyForMoreMediaData == false { Thread.sleep(forTimeInterval: 0.002) }
                 var cgImage: CGImage? = lastImage
                 if let sample = output.copyNextSampleBuffer(), let pb = CMSampleBufferGetImageBuffer(sample) {
+                    // Map output frame index to source time using rate; when reader exhausts early, we freeze
                     let ci = CIImage(cvImageBuffer: pb).transformed(by: preferredUprightTransform(for: track))
                     cgImage = context.createCGImage(ci, from: ci.extent)
                     lastImage = cgImage

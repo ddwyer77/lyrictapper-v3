@@ -6,6 +6,7 @@ struct ScrambleClipEditView: View {
     @ObservedObject var app: AppState
     @State private var nudgeFrames: Int = 0
     private let thumbService = LocalVideoThumbnailService()
+    @State private var playbackRate: Double = 1.0
 
     private var takeIndex: Int? {
         guard let id = app.projectV2.tracks.scramble.currentTakeId else { return nil }
@@ -23,6 +24,14 @@ struct ScrambleClipEditView: View {
                 Button("Apply Nudge Start") { applyNudge(startDelta: framesToSeconds(nudgeFrames), endDelta: 0) }
                 Button("Apply Nudge End") { applyNudge(startDelta: 0, endDelta: framesToSeconds(nudgeFrames)) }
                 Spacer()
+                HStack(spacing: 8) {
+                    Text("Speed")
+                    Slider(value: $playbackRate, in: 0.25...4.0, step: 0.05)
+                        .frame(width: 160)
+                    Text(String(format: "%.2fx", playbackRate))
+                        .frame(width: 60, alignment: .leading)
+                    Button("Save Speed") { saveRate() }
+                }
                 Button("Relink Videos…") { relinkVideos() }
                 Button("Continue to Export") { app.stage = .scrambleExport }
             }
@@ -42,6 +51,7 @@ struct ScrambleClipEditView: View {
             if app.projectV2.tracks.scramble.currentTakeId == nil {
                 app.projectV2.tracks.scramble.currentTakeId = app.projectV2.tracks.scramble.takes.first?.id
             }
+            if let t = take { playbackRate = max(0.1, t.playbackRate ?? 1.0) }
         }
     }
 
@@ -126,6 +136,13 @@ struct ScrambleClipEditView: View {
                 app.projectV2.tracks.scramble.takes[idx] = t
             }
         }
+    }
+
+    private func saveRate() {
+        guard let idx = takeIndex else { return }
+        var t = app.projectV2.tracks.scramble.takes[idx]
+        t.playbackRate = playbackRate
+        app.projectV2.tracks.scramble.takes[idx] = t
     }
 }
 

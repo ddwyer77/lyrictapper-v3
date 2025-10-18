@@ -61,7 +61,8 @@ struct LoadVideosView: View {
                     intervals: [],
                     cuts: [],
                     previewPath: nil,
-                    avoidanceWindowSec: 1.5
+                    avoidanceWindowSec: 1.5,
+                    playbackRate: 1.0
                 )
                 if let existingIdx = existingIdx {
                     app.projectV2.tracks.scramble.takes[existingIdx] = take

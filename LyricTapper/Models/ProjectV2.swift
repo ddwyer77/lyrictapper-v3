@@ -134,6 +134,8 @@ struct TrackScrambleTake: Codable, Identifiable, Equatable {
     var previewPath: String?
     // Settings
     var avoidanceWindowSec: Double
+    // Playback speed multiplier (1.0 = normal). Optional for backward compat.
+    var playbackRate: Double?
 }
 
 struct VideoFileID: Hashable, Codable {
