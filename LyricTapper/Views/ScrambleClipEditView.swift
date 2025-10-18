@@ -3,6 +3,7 @@ import SwiftUI
 struct ScrambleClipEditView: View {
     @ObservedObject var app: AppState
     @State private var nudgeFrames: Int = 0
+    private let thumbService = VideoThumbnailService()
 
     private var takeIndex: Int? {
         guard let id = app.projectV2.tracks.scramble.currentTakeId else { return nil }
@@ -20,10 +21,12 @@ struct ScrambleClipEditView: View {
                 Button("Apply Nudge Start") { applyNudge(startDelta: framesToSeconds(nudgeFrames), endDelta: 0) }
                 Button("Apply Nudge End") { applyNudge(startDelta: 0, endDelta: framesToSeconds(nudgeFrames)) }
                 Spacer()
+                Button("Relink Videos…") { relinkVideos() }
                 Button("Continue to Export") { app.stage = .scrambleExport }
             }
             Table(rows()) {
                 TableColumn("#") { row in Text(String(row.index + 1)) }
+                TableColumn("Thumb") { row in thumb(row) }
                 TableColumn("Video") { row in Text(row.videoName) }
                 TableColumn("StartSec") { row in Text(String(format: "%.3f", row.startSec)) }
                 TableColumn("Start") { row in Text(String(format: "%.3f", row.interval.start)) }
@@ -41,12 +44,12 @@ struct ScrambleClipEditView: View {
             let iv = t.intervals[i]
             let cut = t.cuts[i]
             let name = t.videoCatalog[cut.videoID]?.filename ?? "?"
-            out.append(Row(index: i, videoName: name, startSec: cut.startSec, interval: iv))
+            out.append(Row(index: i, videoName: name, startSec: cut.startSec, interval: iv, fileID: cut.videoID))
         }
         return out
     }
 
-    private struct Row: Identifiable { let id = UUID(); let index: Int; let videoName: String; let startSec: Double; let interval: VideoInterval }
+    private struct Row: Identifiable { let id = UUID(); let index: Int; let videoName: String; let startSec: Double; let interval: VideoInterval; let fileID: VideoFileID }
 
     private func framesToSeconds(_ frames: Int) -> Double { Double(frames) / 30.0 }
 
@@ -66,6 +69,55 @@ struct ScrambleClipEditView: View {
         let videos = t.videoCatalog.map { ($0.key, $0.value) }
         t.cuts = ScramblePlannerService.planCuts(intervals: t.intervals, videos: videos, seed: t.shuffleSeed, avoidanceSec: t.avoidanceWindowSec)
         app.projectV2.tracks.scramble.takes[idx] = t
+    }
+
+    @ViewBuilder
+    private func thumb(_ row: Row) -> some View {
+        if let img = thumbService.thumbnail(for: row.fileID, at: row.startSec, targetWidth: 80) {
+            Image(nsImage: img)
+                .resizable()
+                .frame(width: 80, height: 80)
+                .clipped()
+        } else {
+            Color.gray.frame(width: 80, height: 80)
+        }
+    }
+
+    private func relinkVideos() {
+        guard let idx = takeIndex else { return }
+        var t = app.projectV2.tracks.scramble.takes[idx]
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = true
+        panel.canChooseFiles = false
+        panel.allowsMultipleSelection = false
+        panel.begin { resp in
+            guard resp == .OK, let folder = panel.url else { return }
+            if let bm = try? BookmarkService.createBookmark(for: folder) {
+                let (newCatalog, _) = VideoSequenceService.scanFolder(root: bm, includeSubfolders: t.includeSubfolders, skipDuplicateFilenames: t.skipDuplicateVideos)
+                // Remap by filename
+                var filenameToID: [String: VideoFileID] = [:]
+                for (fid, meta) in newCatalog { filenameToID[meta.filename] = fid }
+                var remappedCatalog: [VideoFileID: VideoMeta] = [:]
+                var cuts: [ScrambleCut] = []
+                for (i, c) in t.cuts.enumerated() {
+                    let name = t.videoCatalog[c.videoID]?.filename
+                    if let name, let newId = filenameToID[name], let newMeta = newCatalog[newId] {
+                        remappedCatalog[newId] = newMeta
+                        cuts.append(ScrambleCut(intervalIndex: i, videoID: newId, startSec: c.startSec))
+                    } else {
+                        // Keep old if still resolvable
+                        remappedCatalog[c.videoID] = t.videoCatalog[c.videoID]
+                        cuts.append(c)
+                    }
+                }
+                t.videoFolderBookmark = bm
+                // Merge in any new files as additional catalog entries
+                for (fid, meta) in newCatalog { if remappedCatalog[fid] == nil { remappedCatalog[fid] = meta } }
+                t.videoCatalog = remappedCatalog
+                t.cuts = cuts
+                app.projectV2.tracks.scramble.takes[idx] = t
+            }
+        }
     }
 }
 
