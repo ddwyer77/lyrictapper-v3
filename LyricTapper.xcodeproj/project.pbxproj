@@ -33,16 +33,9 @@
 		AA0001180000000000000001 /* LyricTapper/Views/WaveformScrubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00001A0000000000000001 /* LyricTapper/Views/WaveformScrubView.swift */; };
 		AA0001190000000000000001 /* LyricTapper/Views/SystemFontPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00001B0000000000000001 /* LyricTapper/Views/SystemFontPickerView.swift */; };
 		AA00011A0000000000000001 /* LyricTapper/Views/PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00001C0000000000000001 /* LyricTapper/Views/PlayerView.swift */; };
-		ABF2F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift */; };
-		ABF2F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift */; };
-		ABF2F0030000000000000001 /* LyricTapper/Views/HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0030000000000000001 /* LyricTapper/Views/HomeView.swift */; };
-		ABF2F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift */; };
-		ABF2F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift */; };
-		ABF2F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift */; };
-		ABF2F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift */; };
-		AA00F1040000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0030000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift */; };
 		AA00F1010000000000000001 /* LyricTapper/Models/ProjectV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0010000000000000001 /* LyricTapper/Models/ProjectV2.swift */; };
 		AA00F1020000000000000001 /* LyricTapper/Services/ProjectManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0020000000000000001 /* LyricTapper/Services/ProjectManager.swift */; };
+		AA00F1040000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0030000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift */; };
 		AA00F1050000000000000001 /* LyricTapper/Views/DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00011D0000000000000001 /* LyricTapper/Views/DashboardView.swift */; };
 		AA00F1060000000000000001 /* LyricTapper/Views/MergeExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0090000000000000001 /* LyricTapper/Views/MergeExportView.swift */; };
 		AA00F1070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F0070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift */; };
@@ -51,14 +44,18 @@
 		AA00F10B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift */; };
 		AA00F10C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift */; };
 		AA00F10D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00F00D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift */; };
-		AD3000010000000000000001 /* LyricTapper/Services/ScramblePlannerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1000010000000000000001 /* LyricTapper/Services/ScramblePlannerService.swift */; };
-		AD3000020000000000000001 /* LyricTapper/Services/VideoSequenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1000020000000000000001 /* LyricTapper/Services/VideoSequenceService.swift */; };
-		AD3000030000000000000001 /* LyricTapper/Services/ScrambleExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1000030000000000000001 /* LyricTapper/Services/ScrambleExportService.swift */; };
-		AD3000040000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1000040000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift */; };
-		AD3000050000000000000001 /* LyricTapper/Views/LoadVideosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2000010000000000000001 /* LyricTapper/Views/LoadVideosView.swift */; };
-		AD3000060000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2000020000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift */; };
-		AD3000070000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2000030000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift */; };
-		AD3000080000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2000040000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift */; };
+		ABF2F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0010000000000000001 /* LyricTapper/Services/ImageSequenceService.swift */; };
+		ABF2F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0020000000000000001 /* LyricTapper/Services/ImageDecodeCache.swift */; };
+		ABF2F0030000000000000001 /* LyricTapper/Views/HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0030000000000000001 /* LyricTapper/Views/HomeView.swift */; };
+		ABF2F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0040000000000000001 /* LyricTapper/Views/LoadImagesView.swift */; };
+		ABF2F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift */; };
+		ABF2F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift */; };
+        ABF2F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF1F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift */; };
+        C9B100010000000000000001 /* LyricTapper/Views/LoadVideosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100010000000000000001 /* LyricTapper/Views/LoadVideosView.swift */; };
+        C9B100020000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100020000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift */; };
+        C9B100030000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100030000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift */; };
+        C9B100040000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100040000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift */; };
+        C97678F42EA343DD007A5A9B /* ScrambleExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97678F32EA343DD007A5A9B /* ScrambleExportService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +124,11 @@
 		ABF1F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageFlashTapView.swift; sourceTree = SOURCE_ROOT; };
 		ABF1F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageFlashEditView.swift; sourceTree = SOURCE_ROOT; };
 		ABF1F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ImageFlashExportView.swift; sourceTree = SOURCE_ROOT; };
+        C97678F32EA343DD007A5A9B /* ScrambleExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/ScrambleExportService.swift; sourceTree = SOURCE_ROOT; };
+        C9A100010000000000000001 /* LyricTapper/Views/LoadVideosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/LoadVideosView.swift; sourceTree = SOURCE_ROOT; };
+        C9A100020000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ScrambleClipTapView.swift; sourceTree = SOURCE_ROOT; };
+        C9A100030000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ScrambleClipEditView.swift; sourceTree = SOURCE_ROOT; };
+        C9A100040000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ScrambleClipExportView.swift; sourceTree = SOURCE_ROOT; };
 		C99F86772E9AF3AE00627C27 /* LyricTapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LyricTapper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99F867C2E9AF40B00627C27 /* Lyric Tapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lyric Tapper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99F868C2E9AF40D00627C27 /* Lyric TapperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Lyric TapperTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -230,10 +232,7 @@
 				AA00F0070000000000000001 /* LyricTapper/Services/OverlayRenderService.swift */,
 				AA00F0020000000000000001 /* LyricTapper/Services/ProjectManager.swift */,
 				AA00F0080000000000000001 /* LyricTapper/Services/CompositorService.swift */,
-				AD1000010000000000000001 /* LyricTapper/Services/ScramblePlannerService.swift */,
-				AD1000020000000000000001 /* LyricTapper/Services/VideoSequenceService.swift */,
-				AD1000030000000000000001 /* LyricTapper/Services/ScrambleExportService.swift */,
-				AD1000040000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift */,
+				C97678F32EA343DD007A5A9B /* ScrambleExportService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -260,10 +259,10 @@
 				ABF1F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift */,
 				AA00F0030000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift */,
 				AA00011D0000000000000001 /* LyricTapper/Views/DashboardView.swift */,
-				AD2000010000000000000001 /* LyricTapper/Views/LoadVideosView.swift */,
-				AD2000020000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift */,
-				AD2000030000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift */,
-				AD2000040000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift */,
+				C9A100010000000000000001 /* LyricTapper/Views/LoadVideosView.swift */,
+				C9A100020000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift */,
+				C9A100030000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift */,
+				C9A100040000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -392,7 +391,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA00011B0000000000000001 /* LyricTapper/Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +427,7 @@
 				AA00010A0000000000000001 /* LyricTapper/Services/BookmarkService.swift in Sources */,
 				AA00010B0000000000000001 /* LyricTapper/Services/ProjectStore.swift in Sources */,
 				AA00010C0000000000000001 /* LyricTapper/Services/ExportService.swift in Sources */,
+				C97678F42EA343DD007A5A9B /* ScrambleExportService.swift in Sources */,
 				AA00010D0000000000000001 /* LyricTapper/Views/SidebarView.swift in Sources */,
 				AA00010E0000000000000001 /* LyricTapper/Views/LoadAudioView.swift in Sources */,
 				AA00010F0000000000000001 /* LyricTapper/Views/LoadLyricsView.swift in Sources */,
@@ -450,6 +449,10 @@
 				ABF2F0050000000000000001 /* LyricTapper/Views/ImageFlashTapView.swift in Sources */,
 				ABF2F0060000000000000001 /* LyricTapper/Views/ImageFlashEditView.swift in Sources */,
 				ABF2F0070000000000000001 /* LyricTapper/Views/ImageFlashExportView.swift in Sources */,
+                C9B100010000000000000001 /* LyricTapper/Views/LoadVideosView.swift in Sources */,
+                C9B100020000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift in Sources */,
+                C9B100030000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift in Sources */,
+                C9B100040000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift in Sources */,
 				AA00F1040000000000000001 /* LyricTapper/Views/ProjectsLandingView.swift in Sources */,
 				AA00F1010000000000000001 /* LyricTapper/Models/ProjectV2.swift in Sources */,
 				AA00F1020000000000000001 /* LyricTapper/Services/ProjectManager.swift in Sources */,
@@ -461,14 +464,6 @@
 				AA00F10B0000000000000001 /* LyricTapper/Views/ImageTakesView.swift in Sources */,
 				AA00F10C0000000000000001 /* LyricTapper/Views/AudioTrimView.swift in Sources */,
 				AA00F10D0000000000000001 /* LyricTapper/Views/WaveformTrimView.swift in Sources */,
-				AD3000010000000000000001 /* LyricTapper/Services/ScramblePlannerService.swift in Sources */,
-				AD3000020000000000000001 /* LyricTapper/Services/VideoSequenceService.swift in Sources */,
-				AD3000030000000000000001 /* LyricTapper/Services/ScrambleExportService.swift in Sources */,
-				AD3000040000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift in Sources */,
-				AD3000050000000000000001 /* LyricTapper/Views/LoadVideosView.swift in Sources */,
-				AD3000060000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift in Sources */,
-				AD3000070000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift in Sources */,
-				AD3000080000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -612,6 +607,7 @@
 		AA000B030000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_DISPLAY_NAME = "LyricTapper V3 Dev";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "LyricTapper/Entitlements/LyricTapper.mas-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -629,7 +625,6 @@
 				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.noise.LyricTapper.v3.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				APP_DISPLAY_NAME = "LyricTapper V3 Dev";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -641,6 +636,7 @@
 		AA000B040000000000000001 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_DISPLAY_NAME = LyricTapper;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = LyricTapper/Entitlements/LyricTapper.mas.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -659,7 +655,6 @@
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.noise.LyricTapper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				APP_DISPLAY_NAME = "LyricTapper";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
