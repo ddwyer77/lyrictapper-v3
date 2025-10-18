@@ -1,10 +1,11 @@
 import SwiftUI
 import AppKit
+import AVFoundation
 
 struct ScrambleClipEditView: View {
     @ObservedObject var app: AppState
     @State private var nudgeFrames: Int = 0
-    private let thumbService = VideoThumbnailService()
+    private let thumbService = LocalVideoThumbnailService()
 
     private var takeIndex: Int? {
         guard let id = app.projectV2.tracks.scramble.currentTakeId else { return nil }
@@ -122,4 +123,29 @@ struct ScrambleClipEditView: View {
     }
 }
 
+
+// Minimal, local thumbnail provider to avoid target-link hiccups
+private final class LocalVideoThumbnailService {
+    private let cache = NSCache<NSData, NSImage>()
+    func thumbnail(for id: VideoFileID, at seconds: Double, targetWidth: CGFloat = 160) -> NSImage? {
+        let key = NSMutableData()
+        key.append(id.urlBookmark)
+        var s = seconds
+        key.append(&s, length: MemoryLayout.size(ofValue: s))
+        if let cached = cache.object(forKey: key) { return cached }
+        guard let url = BookmarkService.resolveBookmark(id.urlBookmark) else { return nil }
+        _ = url.startAccessingSecurityScopedResource(); defer { url.stopAccessingSecurityScopedResource() }
+        let asset = AVAsset(url: url)
+        let gen = AVAssetImageGenerator(asset: asset)
+        gen.appliesPreferredTrackTransform = true
+        gen.maximumSize = CGSize(width: targetWidth, height: targetWidth * 4)
+        let t = CMTime(seconds: max(0, seconds), preferredTimescale: 600)
+        if let cg = try? gen.copyCGImage(at: t, actualTime: nil) {
+            let ns = NSImage(cgImage: cg, size: .zero)
+            cache.setObject(ns, forKey: key)
+            return ns
+        }
+        return nil
+    }
+}
 

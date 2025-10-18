@@ -55,8 +55,10 @@
         C9B100020000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100020000000000000001 /* LyricTapper/Views/ScrambleClipTapView.swift */; };
         C9B100030000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100030000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift */; };
         C9B100040000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100040000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift */; };
+                C9B100060000000000000001 /* LyricTapper/Services/VideoSequenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100060000000000000001 /* LyricTapper/Services/VideoSequenceService.swift */; };
                 C9B100050000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100050000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift */; };
         C9B100050000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100050000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift */; };
+        C9B100060000000000000001 /* LyricTapper/Services/VideoSequenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A100060000000000000001 /* LyricTapper/Services/VideoSequenceService.swift */; };
         C97678F42EA343DD007A5A9B /* ScrambleExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97678F32EA343DD007A5A9B /* ScrambleExportService.swift */; };
 /* End PBXBuildFile section */
 
@@ -132,6 +134,7 @@
         C9A100030000000000000001 /* LyricTapper/Views/ScrambleClipEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ScrambleClipEditView.swift; sourceTree = SOURCE_ROOT; };
         C9A100040000000000000001 /* LyricTapper/Views/ScrambleClipExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Views/ScrambleClipExportView.swift; sourceTree = SOURCE_ROOT; };
         C9A100050000000000000001 /* LyricTapper/Services/VideoThumbnailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/VideoThumbnailService.swift; sourceTree = SOURCE_ROOT; };
+        C9A100060000000000000001 /* LyricTapper/Services/VideoSequenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTapper/Services/VideoSequenceService.swift; sourceTree = SOURCE_ROOT; };
 		C99F86772E9AF3AE00627C27 /* LyricTapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LyricTapper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99F867C2E9AF40B00627C27 /* Lyric Tapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lyric Tapper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99F868C2E9AF40D00627C27 /* Lyric TapperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Lyric TapperTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
