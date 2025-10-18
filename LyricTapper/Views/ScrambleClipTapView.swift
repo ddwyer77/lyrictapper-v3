@@ -93,7 +93,11 @@ struct ScrambleClipTapView: View {
             Text(status).foregroundColor(.secondary)
         }
         .padding()
-        .onAppear { prepareAudio() }
+        .onAppear {
+            prepareAudio()
+            // Rehydrate preview image when returning
+            if let take = currentTake { updatePreviewFor(index: min(currentIntervalIndex, max(0, take.cuts.count - 1)), in: take) }
+        }
     }
 
     private func prepareAudio() {

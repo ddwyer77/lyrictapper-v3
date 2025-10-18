@@ -23,11 +23,14 @@ struct LoadVideosView: View {
             }
             if let url = folderURL {
                 Text("Selected: \(url.path)").foregroundColor(.secondary)
+            } else if let t = currentTake(), let url = resolvedFolderURL(from: t) {
+                Text("Selected: \(url.path)").foregroundColor(.secondary)
             }
-            Text("Found videos: \(count)   Total duration: \(String(format: "%.1f s", totalDuration))").foregroundColor(.secondary)
+            Text("Found videos: \(countIfKnown())   Total duration: \(String(format: "%.1f s", totalDurationIfKnown()))").foregroundColor(.secondary)
             Spacer()
         }
         .padding()
+        .onAppear { hydrateFromProject() }
     }
 
     private func pickFolder() {
@@ -40,15 +43,11 @@ struct LoadVideosView: View {
             folderURL = url
             if let bm = try? BookmarkService.createBookmark(for: url) {
                 let (catalog, order) = _scanVideos(root: bm, includeSubfolders: includeSubfolders, skipDuplicateFilenames: skipDuplicates)
-                app.projectV2.tracks.scramble.takes.removeAll()
-                // Stash a working take in project V1-like state (we'll commit later in Tap/Edit)
-                // For now, just store catalog in project-level scratch to use during tapping
-                app.project.imageCatalog.removeAll() // no-op, keeps old code paths safe
                 // Keep summary locally
                 count = order.count
                 totalDuration = order.reduce(0) { $0 + (catalog[$1]?.duration ?? 0) }
-                // Cache into a temp take for continuity
-                let take = TrackScrambleTake(
+                // Create or update a working take and set it current
+                var take = TrackScrambleTake(
                     id: UUID().uuidString,
                     name: "Scramble-Take-001",
                     videoFolderBookmark: bm,
@@ -62,14 +61,47 @@ struct LoadVideosView: View {
                     previewPath: nil,
                     avoidanceWindowSec: 1.5
                 )
-                app.projectV2.tracks.scramble.takes = [take]
-                app.projectV2.tracks.scramble.currentTakeId = take.id
+                if let existingIdx = app.projectV2.tracks.scramble.takes.firstIndex(where: { $0.name == take.name }) {
+                    take.id = app.projectV2.tracks.scramble.takes[existingIdx].id
+                    app.projectV2.tracks.scramble.takes[existingIdx] = take
+                    app.projectV2.tracks.scramble.currentTakeId = take.id
+                } else {
+                    app.projectV2.tracks.scramble.takes.append(take)
+                    app.projectV2.tracks.scramble.currentTakeId = take.id
+                }
             }
         }
     }
 
     private func onContinue() {
         app.stage = .scrambleTap
+    }
+
+    // MARK: - Persistence helpers
+    private func currentTake() -> TrackScrambleTake? {
+        guard let id = app.projectV2.tracks.scramble.currentTakeId else { return nil }
+        return app.projectV2.tracks.scramble.takes.first(where: { $0.id == id })
+    }
+
+    private func hydrateFromProject() {
+        guard let t = currentTake() else { return }
+        includeSubfolders = t.includeSubfolders
+        skipDuplicates = t.skipDuplicateVideos
+        count = t.videoCatalog.count
+        totalDuration = t.videoCatalog.values.reduce(0) { $0 + $1.duration }
+        if let url = resolvedFolderURL(from: t) { folderURL = url }
+    }
+
+    private func resolvedFolderURL(from take: TrackScrambleTake) -> URL? {
+        guard let bm = take.videoFolderBookmark, let url = BookmarkService.resolveBookmark(bm) else { return nil }
+        return url
+    }
+
+    private func countIfKnown() -> Int { count > 0 ? count : (currentTake()?.videoCatalog.count ?? 0) }
+    private func totalDurationIfKnown() -> Double {
+        if totalDuration > 0 { return totalDuration }
+        if let t = currentTake() { return t.videoCatalog.values.reduce(0) { $0 + $1.duration } }
+        return 0
     }
 
     // Local fallback to avoid target-link hiccups

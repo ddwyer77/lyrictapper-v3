@@ -37,6 +37,12 @@ struct ScrambleClipEditView: View {
             .frame(minHeight: 240)
         }
         .padding()
+        .onAppear {
+            // Ensure we have a current take; prefer existing one
+            if app.projectV2.tracks.scramble.currentTakeId == nil {
+                app.projectV2.tracks.scramble.currentTakeId = app.projectV2.tracks.scramble.takes.first?.id
+            }
+        }
     }
 
     private func rows() -> [Row] {
@@ -69,7 +75,7 @@ struct ScrambleClipEditView: View {
         t.intervals = updated
         // Re-plan cuts with same seed to keep determinism
         let videos = t.videoCatalog.map { ($0.key, $0.value) }
-        t.cuts = ScramblePlannerService.planCuts(intervals: t.intervals, videos: videos, seed: t.shuffleSeed, avoidanceSec: t.avoidanceWindowSec)
+        t.cuts = _localPlanCuts(intervals: t.intervals, videos: videos, seed: t.shuffleSeed, avoidance: t.avoidanceWindowSec)
         app.projectV2.tracks.scramble.takes[idx] = t
     }
 
@@ -147,6 +153,50 @@ private final class LocalVideoThumbnailService {
         }
         return nil
     }
+}
+
+// Local planners shared with Tap/Export fallbacks
+private func _localIntervals(from taps: [Double], audioDuration: Double) -> [VideoInterval] {
+    guard audioDuration > 0, !taps.isEmpty else { return [] }
+    var out: [VideoInterval] = []
+    var lastEnd = 0.0
+    for i in 0..<taps.count {
+        let s = max(0.0, min(taps[i], audioDuration))
+        let e = (i + 1 < taps.count) ? max(0.0, min(taps[i+1], audioDuration)) : audioDuration
+        let start = max(s, lastEnd)
+        let end = max(e, start)
+        out.append(VideoInterval(start: start, end: end))
+        lastEnd = end
+    }
+    return out
+}
+
+private struct _RNG3 { var state: UInt64; mutating func next() -> UInt64 { var x = state == 0 ? 0x9E3779B97F4A7C15 : state; x ^= x >> 12; x ^= x << 25; x ^= x >> 27; state = x; return x &* 2685821657736338717 }; mutating func nextInt(_ n: Int) -> Int { Int(next() % UInt64(max(1,n))) }; mutating func next01() -> Double { Double(next()) / Double(UInt64.max) } }
+
+private func _localPlanCuts(intervals: [VideoInterval], videos: [(VideoFileID, VideoMeta)], seed: UInt64, avoidance: Double) -> [ScrambleCut] {
+    guard !videos.isEmpty else { return [] }
+    var rng = _RNG3(state: seed)
+    var used: [VideoFileID: [Double]] = [:]
+    var out: [ScrambleCut] = []
+    for (i, iv) in intervals.enumerated() {
+        let seg = max(0.0, iv.end - iv.start)
+        var chosen: (VideoFileID, Double)? = nil
+        for _ in 0..<max(8, videos.count * 2) {
+            let pick = videos[rng.nextInt(videos.count)]
+            if seg < pick.1.duration {
+                let slack = max(0.0, pick.1.duration - seg)
+                let start = (slack > 0) ? rng.next01() * slack : 0
+                if !(used[pick.0] ?? []).contains(where: { abs($0 - start) < avoidance }) { chosen = (pick.0, start); used[pick.0, default: []].append(start); break }
+            }
+        }
+        if let c = chosen {
+            out.append(ScrambleCut(intervalIndex: i, videoID: c.0, startSec: c.1))
+        } else if let long = videos.max(by: { $0.1.duration < $1.1.duration }) {
+            let start = max(0.0, long.1.duration - seg)
+            out.append(ScrambleCut(intervalIndex: i, videoID: long.0, startSec: start))
+        }
+    }
+    return out
 }
 
 private func _scanVideos(root bookmark: Data, includeSubfolders: Bool, skipDuplicateFilenames: Bool) -> ([VideoFileID: VideoMeta], [VideoFileID]) {
