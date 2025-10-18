@@ -1,5 +1,6 @@
 import SwiftUI
 import AVFoundation
+import AppKit
 
 struct ScrambleClipTapView: View {
     @ObservedObject var app: AppState

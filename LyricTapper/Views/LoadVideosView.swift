@@ -1,5 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
+import AppKit
 
 struct LoadVideosView: View {
     @ObservedObject var app: AppState

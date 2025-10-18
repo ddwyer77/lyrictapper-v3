@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 struct ScrambleClipEditView: View {
     @ObservedObject var app: AppState

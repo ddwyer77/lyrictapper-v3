@@ -1,6 +1,7 @@
 import SwiftUI
 import AVFoundation
 import AVKit
+import AppKit
 
 struct ScrambleClipExportView: View {
     @ObservedObject var app: AppState
