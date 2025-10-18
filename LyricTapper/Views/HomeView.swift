@@ -14,6 +14,9 @@ struct HomeView: View {
                 toolCard(title: "Image Flash", systemImage: "photo.on.rectangle") {
                     app.switchTool(.imageFlash)
                 }
+                toolCard(title: "Scramble Clip", systemImage: "film") {
+                    app.switchTool(.scrambleClip)
+                }
             }
             .frame(maxWidth: 720)
             Spacer()
